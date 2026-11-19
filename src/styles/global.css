@@ -1,8 +1,55 @@
+/* Fuentes: Lora para títulos (la letra del logo de Potrero),
+ * Archivo para texto (más firme y con números claros). Autoalojadas: Vite las copia y les pone el prefijo
+ * de la base (/potrero-herramientas/) solo. */
+@font-face {
+  font-family: 'Lora';
+  src: url('../assets/fonts/lora-latin.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Lora';
+  src: url('../assets/fonts/lora-italic-latin.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Archivo';
+  src: url('../assets/fonts/archivo-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html { font-family: 'DM Sans', sans-serif; }
-  body { @apply bg-[#F5F5F5] text-gray-900; }
+  html {
+    font-family: 'Archivo', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body { @apply bg-[#F4EFE3] text-[#0C1A10]; }
+
+  *:focus-visible {
+    outline: 2px solid #C8A971;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Piezas compartidas con la landing */
+@layer components {
+  .eyebrow { @apply text-xs font-semibold uppercase tracking-[0.12em] text-earth-700; }
+  .title-accent { @apply inline-block w-12 h-0.5 bg-earth-400 rounded-sm; }
+  .btn-whatsapp {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl
+           bg-[#25D366] text-white font-semibold text-base transition-all duration-200 shadow-warm
+           hover:bg-[#1faf54] hover:-translate-y-0.5 hover:shadow-warm-lg;
+  }
 }

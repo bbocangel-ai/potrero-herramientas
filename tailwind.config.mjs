@@ -30,8 +30,13 @@ export default {
         },
       },
       fontFamily: {
-        display: ['Fraunces', 'Georgia', 'serif'],
-        sans:    ['DM Sans', 'sans-serif'],
+        display: ['Lora', 'Georgia', 'serif'],
+        sans:    ['Archivo', 'sans-serif'],
+      },
+      boxShadow: {
+        'warm-sm': '0 1px 2px rgba(30, 66, 48, 0.06), 0 1px 2px rgba(30, 66, 48, 0.04)',
+        'warm':    '0 4px 12px rgba(30, 66, 48, 0.08), 0 2px 4px rgba(30, 66, 48, 0.04)',
+        'warm-lg': '0 12px 32px rgba(30, 66, 48, 0.12), 0 4px 8px rgba(30, 66, 48, 0.06)',
       },
     },
   },

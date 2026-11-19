@@ -5,562 +5,1053 @@ const BASE       = import.meta.env.BASE_URL
 const isotipoSrc = `${BASE}brand/isotipo-color.png`.replace(/\/+/g, '/')
 const hubUrl     = BASE.replace(/\/$/, '') + '/'
 const WA         = 'https://wa.me/59177423154?text=Hola%20Potrero%2C%20quiero%20saber%20m%C3%A1s'
+
+const conceptos = [
+  { id: 'alimentacion', label: 'Alimentación y suplemento' },
+  { id: 'sanidad',      label: 'Sanidad' },
+  { id: 'personal',     label: 'Personal' },
+  { id: 'pasto',        label: 'Pasto, arriendo o pastaje' },
+  { id: 'otros',        label: 'Otros gastos del campo' },
+]
 ---
 
 <Layout
-  title="Simulador de Resultados — Potrero"
-  description="Simulá la rentabilidad completa de tu lote: compra, costos operativos, venta y ROI. Todo en Bs. Herramienta gratuita de Potrero."
+  title="Simulador de Negocios Ganaderos — Potrero"
+  description="Evaluá un negocio de recría o engorde antes de comprar: cuánto podés pagar, a qué precio necesitás vender, cuánta plata necesitás y en cuánto tiempo. Guardá y compará hasta 5 escenarios. Todo en Bs."
 >
-  <div class="min-h-screen bg-earth-50 font-sans">
+  <div class="min-h-screen bg-earth-100 font-sans">
 
-    {/* ── HEADER ── */}
-    <header class="bg-[#1E4230] text-white px-5 py-4 flex items-center justify-between gap-4 sticky top-0 z-40 shadow-lg">
-      <a href={hubUrl} class="flex items-center gap-2 text-earth-300 hover:text-white transition-colors text-sm">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        Herramientas
-      </a>
-      <a href={hubUrl} class="flex items-center gap-2.5">
-        <img src={isotipoSrc} alt="Potrero" class="w-8 h-8 object-contain" />
-        <span class="font-display font-medium text-[1.15rem] tracking-tight leading-none">Potrero</span>
-      </a>
-      <a href={WA} target="_blank" rel="noopener noreferrer"
-        class="text-xs font-semibold bg-[#25D366] hover:bg-[#1faf54] text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-        Consultas
-      </a>
+    {/* ── NAVBAR (como en potrerolatam.com) ── */}
+    <header class="sticky top-0 z-40 h-[60px] bg-earth-100/90 backdrop-blur-md border-b border-earth-200">
+      <div class="max-w-5xl mx-auto h-full px-4 md:px-6 flex items-center justify-between gap-4">
+        <a href={hubUrl} class="flex items-center gap-2.5" aria-label="Herramientas Potrero">
+          <img src={isotipoSrc} alt="" class="w-9 h-9 object-contain" />
+          <span class="font-display font-semibold text-[1.3rem] text-potrero-900 tracking-tight">Potrero</span>
+        </a>
+        <div class="flex items-center gap-5">
+          <a href={hubUrl} class="hidden sm:inline text-sm font-semibold text-potrero-800 hover:text-potrero-600 transition">Herramientas</a>
+          <a href="https://potrerolatam.com/" class="hidden md:inline text-sm font-semibold text-potrero-800 hover:text-potrero-600 transition">Conocé Potrero</a>
+          <a href={WA} target="_blank" rel="noopener noreferrer" class="btn-whatsapp !py-2 !px-4 !text-sm">WhatsApp</a>
+        </div>
+      </div>
     </header>
 
-    {/* ── TITLE BAR ── */}
-    <div class="bg-[#1E4230] text-white px-5 pt-6 pb-8 text-center border-t border-[#163527]">
-      <h1 class="font-display font-medium text-[1.75rem] md:text-[2.25rem] tracking-tight leading-tight">
-        Simulador de <em class="italic text-earth-400">Resultados</em>
-      </h1>
-      <p class="text-earth-300/70 text-sm mt-2">
-        Diferencial compra-venta · Costo de producción · Margen y ROI en <strong class="text-earth-300">Bs</strong>
+    {/* ── HERO ── */}
+    <section class="relative overflow-hidden bg-potrero-900">
+      <div class="absolute inset-0" aria-hidden="true">
+        <div class="absolute inset-0 bg-gradient-to-br from-potrero-900 via-potrero-800 to-potrero-700"></div>
+        <svg class="absolute inset-0 h-full w-full opacity-[0.13]" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <path d={`M-80,${20 + i * 36} C160,${-5 + i * 36} 340,${58 + i * 36} 520,${16 + i * 36} S790,${-8 + i * 36} 900,${36 + i * 36}`} fill="none" stroke="#E8DCC4" stroke-width="0.9" />
+          ))}
+        </svg>
+      </div>
+      <div class="relative max-w-5xl mx-auto px-4 md:px-6 py-10 md:py-14">
+        <a href={hubUrl} class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-earth-300 hover:text-earth-200 mb-5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Herramientas gratuitas
+        </a>
+        <h1 class="font-display font-semibold leading-[1.05] tracking-tight text-white" style="font-size: clamp(2.1rem, 5vw, 3.4rem);">
+          Antes de comprar,<br /><em class="font-normal italic text-earth-400">hacé los números.</em>
+        </h1>
+        <p class="mt-4 max-w-2xl text-base md:text-lg leading-relaxed text-earth-200/85">
+          Simulador de negocios de recría y engorde: cuánto podés pagar, a qué precio necesitás vender y cuánta plata queda
+          <span class="font-semibold text-earth-300">— y en cuánto tiempo.</span> Todo en Bs, por animal.
+        </p>
+      </div>
+    </section>
+
+    {/* ── PESTAÑAS ── */}
+    <nav class="bg-earth-50 border-b border-earth-200 sticky top-[60px] z-30">
+      <div class="max-w-5xl mx-auto px-2 md:px-4 flex gap-1 overflow-x-auto" role="tablist">
+        <button type="button" class="tab" role="tab" data-tab="negocio" aria-selected="true">
+          <span class="tab-n">1</span> Mi negocio
+        </button>
+        <button type="button" class="tab" role="tab" data-tab="comparar" aria-selected="false">
+          <span class="tab-n">2</span> Comparar <span id="tab-count" class="text-earth-500 font-normal">(0)</span>
+        </button>
+        <button type="button" class="tab" role="tab" data-tab="margenes" aria-selected="false">
+          <span class="tab-n">3</span> ¿Cuánto aguanta?
+        </button>
+      </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-4 pt-4">
+      <p class="text-xs text-earth-700 bg-earth-50 border border-earth-200 rounded-xl px-4 py-2.5">
+        Los escenarios son <strong>supuestos</strong> que vos cargás, no pronósticos. Sirven para ver qué pasa si los precios, el peso o los costos son los que imaginás.
       </p>
     </div>
 
-    {/* ── MAIN LAYOUT ── */}
-    <div class="max-w-5xl mx-auto px-4 py-6 md:py-8 grid lg:grid-cols-[1fr_340px] gap-5 items-start">
+    {/* ════════════════ PESTAÑA 1: MI NEGOCIO ════════════════ */}
+    <section id="panel-negocio" class="tab-panel max-w-5xl mx-auto px-4 py-5 grid lg:grid-cols-[1fr_340px] gap-5 items-start">
 
-      {/* ── FORMULARIO ── */}
-      <div class="space-y-4" id="calc-form">
+      <form id="form" class="space-y-4" autocomplete="off" onsubmit="return false">
 
-        {/* SECCIÓN 1: Lote e inversión */}
-        <div class="calc-section" id="sec-lote">
-          <button type="button" class="sec-header" aria-expanded="true" aria-controls="body-lote">
-            <div class="flex items-center gap-3">
-              <div class="sec-icon bg-potrero-100 text-potrero-700">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              </div>
-              <div>
-                <p class="font-semibold text-potrero-900 text-sm leading-none">Lote e Inversión</p>
-                <p id="tag-lote" class="text-earth-600 text-xs mt-0.5">100 cab. · Bs 250/kg PV</p>
-              </div>
+        {/* Escenarios guardados */}
+        <div id="guardados" class="card px-5 py-4"></div>
+
+        {/* Escenario */}
+        <div class="card">
+          <div class="card-head"><p class="card-title">Escenario</p></div>
+          <div class="card-body grid sm:grid-cols-2 gap-4">
+            <div class="field">
+              <label for="f-nombre">Nombre</label>
+              <input id="f-nombre" data-k="nombre" type="text" maxlength="40" placeholder="Ej.: Terneros de Juan, compra cara" />
             </div>
-            <svg class="sec-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-          </button>
-          <div id="body-lote" class="sec-body">
-            <div class="grid sm:grid-cols-2 gap-4">
-              <div class="field-group">
-                <label for="f-tipo">Tipo de operación</label>
-                <select id="f-tipo" name="tipo">
-                  <option value="engorde">Engorde</option>
-                  <option value="recria">Recría</option>
-                  <option value="ciclo">Ciclo completo</option>
-                </select>
-              </div>
-              <div class="field-group">
-                <label for="f-cabezas">Cantidad de cabezas</label>
-                <div class="input-suffix">
-                  <input id="f-cabezas" type="number" min="1" value="100" placeholder="100" />
-                  <span>cab.</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <label for="f-peso-ini">Peso inicial promedio</label>
-                <div class="input-suffix">
-                  <input id="f-peso-ini" type="number" min="1" value="280" placeholder="280" />
-                  <span>kg PV</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <label for="f-precio-compra">Precio de compra</label>
-                <div class="input-prefix">
-                  <span>Bs/kg</span>
-                  <input id="f-precio-compra" type="number" min="0" step="0.5" value="18" placeholder="18" />
-                </div>
-              </div>
-            </div>
-            <div class="mt-4 bg-earth-100 rounded-xl px-4 py-3 flex flex-wrap gap-x-6 gap-y-1.5 text-sm">
-              <span class="text-earth-600">Inversión compra:</span>
-              <span class="font-semibold text-potrero-900">Bs <span id="calc-inv-cab">5 040</span>/cab · Bs <span id="calc-inv-lote">504 000</span> lote</span>
+            <div class="field">
+              <label for="f-cabezas">Cantidad de animales</label>
+              <div class="suffix"><input id="f-cabezas" data-k="cabezas" type="number" min="1" step="1" /><span>cab.</span></div>
+              <p class="hint">Solo para los totales del lote. Todo lo demás es por animal.</p>
             </div>
           </div>
         </div>
 
-        {/* SECCIÓN 2: Ciclo productivo */}
-        <div class="calc-section" id="sec-ciclo">
-          <button type="button" class="sec-header" aria-expanded="true" aria-controls="body-ciclo">
-            <div class="flex items-center gap-3">
-              <div class="sec-icon bg-amber-50 text-amber-700">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        {/* Fechas */}
+        <div class="card">
+          <div class="card-head"><span class="sec-n">01</span><p class="card-title">Entrada y salida</p></div>
+          <div class="card-body space-y-4">
+            <div class="grid sm:grid-cols-3 gap-4">
+              <div class="field">
+                <label for="f-fechaCompra">Fecha de entrada</label>
+                <input id="f-fechaCompra" data-k="fechaCompra" type="date" />
               </div>
-              <div>
-                <p class="font-semibold text-potrero-900 text-sm leading-none">Ciclo Productivo</p>
-                <p id="tag-ciclo" class="text-earth-600 text-xs mt-0.5">180 días · GMD 0.700 kg/día</p>
-              </div>
-            </div>
-            <svg class="sec-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-          </button>
-          <div id="body-ciclo" class="sec-body">
-            <div class="grid sm:grid-cols-2 gap-4">
-              <div class="field-group">
-                <label for="f-dias">Duración del ciclo</label>
-                <div class="input-suffix">
-                  <input id="f-dias" type="number" min="1" value="180" placeholder="180" />
-                  <span>días</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <label for="f-gmd">GMD – Ganancia Media Diaria</label>
-                <div class="input-suffix">
-                  <input id="f-gmd" type="number" min="0" step="0.05" value="0.700" placeholder="0.700" />
-                  <span>kg/día</span>
+              <div class="field sm:col-span-2">
+                <span class="text-xs font-semibold text-potrero-800">¿Cómo definís la salida?</span>
+                <div class="seg !grid-cols-2" role="radiogroup" aria-label="Cómo definís la salida">
+                  <label><input type="radio" name="modoVenta" value="fecha" data-k="modoVenta" /> <span>Por fecha</span></label>
+                  <label><input type="radio" name="modoVenta" value="peso" data-k="modoVenta" /> <span>Por peso</span></label>
                 </div>
               </div>
             </div>
-            <div class="mt-4 bg-earth-100 rounded-xl px-4 py-3 grid grid-cols-3 gap-3 text-center text-sm">
-              <div>
-                <p class="text-earth-500 text-xs mb-0.5">Peso inicial</p>
-                <p class="font-bold text-potrero-900"><span id="calc-p-ini">280</span> kg</p>
+            <div id="salida-fecha" class="grid sm:grid-cols-3 gap-4">
+              <div class="field">
+                <label for="f-fechaVenta">Fecha de salida</label>
+                <input id="f-fechaVenta" data-k="fechaVenta" type="date" />
               </div>
-              <div class="border-x border-earth-200">
-                <p class="text-earth-500 text-xs mb-0.5">Ganancia</p>
-                <p class="font-bold text-green-700">+<span id="calc-ganancia">126</span> kg</p>
-              </div>
-              <div>
-                <p class="text-earth-500 text-xs mb-0.5">Peso final</p>
-                <p class="font-bold text-potrero-900"><span id="calc-p-fin">406</span> kg</p>
+              <div class="field">
+                <label for="f-dias">o días en tu campo</label>
+                <div class="suffix"><input id="f-dias" type="number" min="1" step="1" /><span>días</span></div>
               </div>
             </div>
+            <div id="salida-peso" class="grid sm:grid-cols-3 gap-4 hidden">
+              <div class="field">
+                <label for="f-pesoVenta">Peso de salida</label>
+                <div class="suffix"><input id="f-pesoVenta" data-k="pesoVenta" type="number" min="0" step="5" /><span>kg vivos</span></div>
+              </div>
+            </div>
+            <p id="txt-fechas" class="calc-line !mt-0"></p>
           </div>
         </div>
 
-        {/* SECCIÓN 3: Costos del ciclo */}
-        <div class="calc-section" id="sec-costos">
-          <button type="button" class="sec-header" aria-expanded="true" aria-controls="body-costos">
-            <div class="flex items-center gap-3">
-              <div class="sec-icon bg-red-50 text-red-600">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        {/* Compra */}
+        <div class="card">
+          <div class="card-head"><span class="sec-n">02</span><p class="card-title">Compra</p></div>
+          <div class="card-body">
+            <div class="grid sm:grid-cols-3 gap-4">
+              <div class="field">
+                <label for="f-pesoCompra">Peso en la balanza</label>
+                <div class="suffix"><input id="f-pesoCompra" data-k="pesoCompra" type="number" min="0" step="1" /><span>kg vivos</span></div>
               </div>
-              <div>
-                <p class="font-semibold text-potrero-900 text-sm leading-none">Costos del Ciclo</p>
-                <p id="tag-costos" class="text-earth-600 text-xs mt-0.5">Total: Bs <span id="tag-costos-total">0</span>/cab</p>
+              <div class="field">
+                <label for="f-desbasteCompra">Desbaste en la compra</label>
+                <div class="suffix"><input id="f-desbasteCompra" data-k="desbasteCompra" type="number" min="0" max="20" step="0.5" /><span>%</span></div>
               </div>
-            </div>
-            <svg class="sec-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-          </button>
-          <div id="body-costos" class="sec-body">
-            <p class="text-xs text-earth-500 mb-4">Todos los valores son <strong>por cabeza / mes</strong> salvo que se indique lo contrario.</p>
-            <div class="grid sm:grid-cols-2 gap-4">
-              <div class="field-group">
-                <label for="f-alim">Alimentación / suplementación</label>
-                <div class="input-prefix">
-                  <span>Bs/cab/mes</span>
-                  <input id="f-alim" type="number" min="0" step="10" value="0" placeholder="0" />
-                </div>
-              </div>
-              <div class="field-group">
-                <label for="f-mo">Mano de obra</label>
-                <div class="input-prefix">
-                  <span>Bs/cab/mes</span>
-                  <input id="f-mo" type="number" min="0" step="5" value="0" placeholder="0" />
-                </div>
-              </div>
-              <div class="field-group">
-                <label for="f-sanidad">Sanidad / veterinario</label>
-                <div class="input-prefix">
-                  <span>Bs/cab/ciclo</span>
-                  <input id="f-sanidad" type="number" min="0" step="5" value="0" placeholder="0" />
-                </div>
-              </div>
-              <div class="field-group">
-                <label for="f-arriendo">Arrendamiento</label>
-                <div class="input-prefix">
-                  <span>Bs/cab/mes</span>
-                  <input id="f-arriendo" type="number" min="0" step="5" value="0" placeholder="0" />
-                </div>
-              </div>
-              <div class="field-group sm:col-span-2">
-                <label for="f-otros">Otras despesas (flete, comisiones, etc.)</label>
-                <div class="input-prefix">
-                  <span>Bs/cab/ciclo</span>
-                  <input id="f-otros" type="number" min="0" step="10" value="0" placeholder="0" />
-                </div>
+              <div class="field">
+                <label for="f-precioCompra">Precio de compra</label>
+                <div class="suffix"><input id="f-precioCompra" data-k="precioCompra" type="number" min="0" step="0.1" /><span>Bs/kg pagado</span></div>
               </div>
             </div>
-
-            {/* Resumen costos */}
-            <div class="mt-4 rounded-xl border border-earth-200 overflow-hidden text-sm">
-              <table class="w-full">
-                <thead>
-                  <tr class="bg-earth-100 text-earth-600 text-xs uppercase tracking-wide">
-                    <th class="text-left px-4 py-2 font-semibold">Costo</th>
-                    <th class="text-right px-4 py-2 font-semibold">/ cab</th>
-                    <th class="text-right px-4 py-2 font-semibold">Lote</th>
-                  </tr>
-                </thead>
-                <tbody id="tabla-costos" class="divide-y divide-earth-100 text-potrero-900">
-                </tbody>
-                <tfoot>
-                  <tr class="bg-earth-100 font-bold text-potrero-900">
-                    <td class="px-4 py-2.5">Total costos operativos</td>
-                    <td class="text-right px-4 py-2.5">Bs <span id="tfoot-cab">0</span></td>
-                    <td class="text-right px-4 py-2.5">Bs <span id="tfoot-lote">0</span></td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
+            <p id="txt-compra" class="calc-line"></p>
+            <details class="mt-3 group">
+              <summary class="more">Gastos de la compra (flete, comisión, guías)</summary>
+              <div class="grid sm:grid-cols-3 gap-4 mt-3">
+                <div class="field">
+                  <label for="f-fleteCompra">Flete de entrada</label>
+                  <div class="suffix"><input id="f-fleteCompra" data-k="fleteCompra" type="number" min="0" step="5" /><span>Bs/animal</span></div>
+                </div>
+                <div class="field">
+                  <label for="f-comisionCompra">Comisión de compra</label>
+                  <div class="suffix"><input id="f-comisionCompra" data-k="comisionCompra" type="number" min="0" step="0.5" /><span>%</span></div>
+                </div>
+                <div class="field">
+                  <label for="f-otrosCompra">Otros al comprar</label>
+                  <div class="suffix"><input id="f-otrosCompra" data-k="otrosCompra" type="number" min="0" step="5" /><span>Bs/animal</span></div>
+                  <p class="hint">Guías, vacunas de ingreso, etc.</p>
+                </div>
+              </div>
+            </details>
           </div>
         </div>
 
-        {/* SECCIÓN 4: Venta */}
-        <div class="calc-section" id="sec-venta">
-          <button type="button" class="sec-header" aria-expanded="true" aria-controls="body-venta">
-            <div class="flex items-center gap-3">
-              <div class="sec-icon bg-green-50 text-green-700">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-              </div>
-              <div>
-                <p class="font-semibold text-potrero-900 text-sm leading-none">Venta</p>
-                <p id="tag-venta" class="text-earth-600 text-xs mt-0.5">Bs 0/kg PV · Rend. 56 %</p>
-              </div>
-            </div>
-            <svg class="sec-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-          </button>
-          <div id="body-venta" class="sec-body">
-            <div class="grid sm:grid-cols-2 gap-4">
-              <div class="field-group">
-                <label for="f-precio-venta">Precio de venta</label>
-                <div class="input-prefix">
-                  <span>Bs/kg PV</span>
-                  <input id="f-precio-venta" type="number" min="0" step="0.5" value="22" placeholder="22" />
-                </div>
-              </div>
-              <div class="field-group">
-                <label for="f-rendimiento">Rendimiento al gancho</label>
-                <div class="input-suffix">
-                  <input id="f-rendimiento" type="number" min="1" max="100" step="0.5" value="56" placeholder="56" />
-                  <span>%</span>
-                </div>
+        {/* Venta */}
+        <div class="card">
+          <div class="card-head"><span class="sec-n">03</span><p class="card-title">Venta</p></div>
+          <div class="card-body">
+            <div class="field mb-4">
+              <span class="text-xs font-semibold text-potrero-800">¿Cómo te pagan?</span>
+              <div class="seg !grid-cols-2" role="radiogroup" aria-label="Tipo de venta">
+                <label><input type="radio" name="tipoVenta" value="vivo" data-k="tipoVenta" /> <span>Por kg vivo</span></label>
+                <label><input type="radio" name="tipoVenta" value="gancho" data-k="tipoVenta" /> <span>Por kg gancho</span></label>
               </div>
             </div>
-            <p class="text-xs text-earth-500 mt-3">
-              El rendimiento al gancho típico en bovinos de trópico es <strong>55–58 %</strong>.
-              Se usa para calcular el precio implícito por kg de carne.
-            </p>
+            <div class="grid sm:grid-cols-3 gap-4">
+              <div class="field" id="campo-desbasteVenta">
+                <label for="f-desbasteVenta">Desbaste en la venta</label>
+                <div class="suffix"><input id="f-desbasteVenta" data-k="desbasteVenta" type="number" min="0" max="20" step="0.5" /><span>%</span></div>
+              </div>
+              <div class="field">
+                <label for="f-precioVenta">Precio de venta</label>
+                <div class="suffix"><input id="f-precioVenta" data-k="precioVenta" type="number" min="0" step="0.1" /><span id="unidad-precioVenta">Bs/kg vivo</span></div>
+              </div>
+              <div class="field" id="campo-rendGancho">
+                <label for="f-rendGancho">Rendimiento al gancho</label>
+                <div class="suffix"><input id="f-rendGancho" data-k="rendGancho" type="number" min="30" max="70" step="0.5" /><span>%</span></div>
+                <p class="hint">Kg gancho ÷ kg vivos con que sale de tu campo (ya incluye viaje y ayuno).</p>
+              </div>
+            </div>
+            <p id="txt-venta" class="calc-line"></p>
+            <details class="mt-3">
+              <summary class="more">Gastos de la venta (comisión, flete)</summary>
+              <div class="grid sm:grid-cols-2 gap-4 mt-3">
+                <div class="field">
+                  <label for="f-comisionVenta">Comisión de venta</label>
+                  <div class="suffix"><input id="f-comisionVenta" data-k="comisionVenta" type="number" min="0" step="0.5" /><span>%</span></div>
+                </div>
+                <div class="field">
+                  <label for="f-fleteVenta">Flete de salida</label>
+                  <div class="suffix"><input id="f-fleteVenta" data-k="fleteVenta" type="number" min="0" step="5" /><span>Bs/animal</span></div>
+                  <p class="hint">Solo si lo pagás vos.</p>
+                </div>
+              </div>
+            </details>
           </div>
         </div>
 
-      </div>
+        {/* Producción */}
+        <div class="card">
+          <div class="card-head"><span class="sec-n">04</span><p class="card-title">Producción en tu campo</p></div>
+          <div class="card-body space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="field">
+                <label for="f-gdp">Ganancia diaria de peso (GDP)</label>
+                <div class="suffix"><input id="f-gdp" data-k="gdp" type="number" min="0" step="0.05" /><span>kg/día</span></div>
+              </div>
+              <div class="field">
+                <label for="f-mortandad">Mortandad</label>
+                <div class="suffix"><input id="f-mortandad" data-k="mortandad" type="number" min="0" max="50" step="0.5" /><span>% del lote</span></div>
+                <p class="hint">Se pierde la venta de los que mueren y se cuenta medio ciclo de su costo.</p>
+              </div>
+            </div>
+            <p id="txt-tiempo" class="calc-line !mt-0"></p>
 
-      {/* ── PANEL RESULTADOS (sticky) ── */}
-      <aside class="space-y-3 lg:sticky lg:top-20">
-
-        {/* TOTALIZADOR */}
-        <div class="bg-potrero-900 text-white rounded-2xl p-5 shadow-lg">
-          <p class="text-earth-400 text-xs font-bold uppercase tracking-widest mb-4">Totalizador del lote</p>
-          <div class="grid grid-cols-3 gap-3 text-center mb-4">
             <div>
-              <p class="text-earth-500 text-[10px] uppercase tracking-wide mb-1">Cabezas</p>
-              <p class="text-white font-bold text-lg leading-none"><span id="r-cabezas">100</span></p>
+              <p class="text-xs font-semibold text-potrero-800 mb-2">¿Cómo querés cargar el costo?</p>
+              <div class="seg" role="radiogroup">
+                <label><input type="radio" name="modoCosto" value="simple" data-k="modoCosto" /> <span>Sencillo: costo por kg producido</span></label>
+                <label><input type="radio" name="modoCosto" value="detallado" data-k="modoCosto" /> <span>Detallado: gastos por mes</span></label>
+              </div>
             </div>
-            <div class="border-x border-potrero-700">
-              <p class="text-earth-500 text-[10px] uppercase tracking-wide mb-1">Kg ganados</p>
-              <p class="text-green-400 font-bold text-lg leading-none">+<span id="r-kg-gan">126</span></p>
-            </div>
-            <div>
-              <p class="text-earth-500 text-[10px] uppercase tracking-wide mb-1">Días</p>
-              <p class="text-white font-bold text-lg leading-none"><span id="r-dias">180</span></p>
-            </div>
-          </div>
 
-          <div class="space-y-2 text-sm border-t border-potrero-800 pt-4">
-            <div class="flex justify-between">
-              <span class="text-earth-400">Ingreso venta <span class="text-earth-600 text-xs">/cab</span></span>
-              <span class="text-white font-semibold">Bs <span id="r-ing-cab">0</span></span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-earth-400">Ingreso venta <span class="text-earth-600 text-xs">lote</span></span>
-              <span class="text-white font-semibold">Bs <span id="r-ing-lote">0</span></span>
-            </div>
-            <div class="border-t border-potrero-800 pt-2 mt-2">
-              <div class="flex justify-between">
-                <span class="text-earth-400">Adquisición <span class="text-earth-600 text-xs">/cab</span></span>
-                <span class="text-red-400 font-semibold">–Bs <span id="r-adq-cab">0</span></span>
+            <div id="costo-simple" class="space-y-3">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="field">
+                  <label for="f-costoKg">Costo por kg producido</label>
+                  <div class="suffix"><input id="f-costoKg" data-k="costoKg" type="number" min="0" step="0.5" /><span>Bs/kg</span></div>
+                </div>
               </div>
-              <div class="flex justify-between mt-1">
-                <span class="text-earth-400">Costos operativos <span class="text-earth-600 text-xs">/cab</span></span>
-                <span class="text-red-400 font-semibold">–Bs <span id="r-op-cab">0</span></span>
+              <p class="hint">
+                Es lo que te cuesta <strong>agregarle 1 kg</strong> al animal en tu campo. No es el precio de compra, ni el costo total dividido por el peso final.
+                Si no lo sabés exacto, poné una estimación y marcá qué incluye.
+              </p>
+              <fieldset>
+                <legend class="text-xs font-semibold text-potrero-800 mb-2">Este costo incluye:</legend>
+                <div class="grid sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                  {conceptos.map(c => (
+                    <label class="check"><input type="checkbox" data-incluye={c.id} /> {c.label}</label>
+                  ))}
+                </div>
+              </fieldset>
+              <div class="note">
+                <strong>Fletes y comisiones no van aquí:</strong> se cargan en Compra y Venta, así no se cuentan dos veces.
+              </div>
+              <div class="note">
+                <strong>Ojo con el tiempo:</strong> con un costo por kg fijo, si el animal gana los mismos kilos el costo total es el mismo aunque tarde más.
+                Si querés comparar una estrategia más intensiva (más suplemento, más GDP), guardá otro escenario con <strong>su propia GDP y su propio costo por kg</strong>.
+                El simulador no adivina cuánto sube el costo cuando suplementás más.
               </div>
             </div>
-            <div class="border-t border-potrero-800 pt-2 mt-2 flex justify-between">
-              <span class="text-earth-400">Costo producción</span>
-              <span class="text-amber-300 font-bold">Bs <span id="r-costo-kg">0</span>/kg</span>
+
+            <div id="costo-detallado" class="space-y-3 hidden">
+              <p class="hint">Gastos por animal <strong>por mes</strong>. Acá el costo sí depende del tiempo: si tarda más, gasta más meses.</p>
+              <div class="grid sm:grid-cols-2 gap-4">
+                {conceptos.map(c => (
+                  <div class="field">
+                    <label for={`f-det-${c.id}`}>{c.label}</label>
+                    <div class="suffix"><input id={`f-det-${c.id}`} data-k={`detallado.${c.id}`} type="number" min="0" step="5" /><span>Bs/animal/mes</span></div>
+                  </div>
+                ))}
+              </div>
+              <p id="txt-detallado" class="calc-line"></p>
             </div>
           </div>
         </div>
 
-        {/* RESULTADO FINAL */}
-        <div id="panel-resultado" class="rounded-2xl p-5 border-2 transition-all duration-300 bg-earth-100 border-earth-200">
-          <p class="text-xs font-bold uppercase tracking-widest mb-3" id="res-label">Resultado</p>
+        {/* Cómo se arma el número */}
+        <details id="detalle" class="card">
+          <summary class="card-head cursor-pointer list-none">
+            <span class="sec-n">?</span>
+            <div class="flex-1">
+              <p class="card-title">Cómo se arma el resultado</p>
+              <p class="text-xs text-earth-600 mt-0.5">De dónde sale la plata, indicadores por kg y cuánto tiempo está comprometida</p>
+            </div>
+            <span class="text-earth-400 text-sm">▾</span>
+          </summary>
+          <div id="detalle-body" class="card-body space-y-5 text-sm"></div>
+        </details>
+      </form>
 
-          {/* Agio */}
-          <div class="mb-4">
-            <p class="text-[10px] text-earth-500 uppercase tracking-wider mb-0.5">Agio (diferencial compra-venta)</p>
-            <p class="text-2xl font-bold leading-none" id="r-agio">Bs 0/kg</p>
-            <p class="text-xs text-earth-500 mt-1">Precio venta − precio compra por kg PV</p>
+      {/* ── RESULTADO ── */}
+      <aside class="space-y-3 lg:sticky lg:top-[120px] lg:max-h-[calc(100vh-130px)] lg:overflow-y-auto">
+        <div id="resultado" class="bg-gradient-to-br from-potrero-900 via-potrero-800 to-potrero-700 text-white rounded-2xl p-6 shadow-warm-lg"></div>
+        <div class="card p-4 space-y-2">
+          <div class="flex gap-2">
+            <button type="button" id="btn-guardar" class="btn-primary flex-1">Guardar escenario</button>
+            <button type="button" id="btn-nuevo" class="btn-ghost hidden">Guardar como nuevo</button>
           </div>
-
-          <div class="space-y-2 text-sm border-t border-earth-200 pt-3">
-            <div class="flex justify-between">
-              <span class="text-earth-600">Resultado <span class="text-earth-500 text-xs">/cab</span></span>
-              <span class="font-bold" id="r-res-cab">Bs 0</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-earth-600">Resultado <span class="text-earth-500 text-xs">lote total</span></span>
-              <span class="font-bold text-lg" id="r-res-lote">Bs 0</span>
-            </div>
-          </div>
-
-          <div class="mt-4 grid grid-cols-3 gap-2 text-center">
-            <div class="bg-white rounded-xl py-2.5 px-1 border border-earth-200">
-              <p class="text-[10px] text-earth-500 uppercase tracking-wide">Margen</p>
-              <p class="font-bold text-base mt-0.5" id="r-margen">0,0 %</p>
-            </div>
-            <div class="bg-white rounded-xl py-2.5 px-1 border border-earth-200">
-              <p class="text-[10px] text-earth-500 uppercase tracking-wide">Margen/Mes</p>
-              <p class="font-bold text-base mt-0.5" id="r-margen-mes">0,0 %</p>
-            </div>
-            <div class="bg-white rounded-xl py-2.5 px-1 border border-earth-200">
-              <p class="text-[10px] text-earth-500 uppercase tracking-wide">ROI</p>
-              <p class="font-bold text-base mt-0.5" id="r-roi">0,0 %</p>
-            </div>
-          </div>
+          <p id="msg-guardar" class="text-xs text-earth-600 min-h-[1rem]"></p>
         </div>
-
-        {/* CTA */}
-        <a href={WA} target="_blank" rel="noopener noreferrer"
-          class="flex items-center gap-3 bg-[#25D366] hover:bg-[#1faf54] text-white rounded-2xl px-5 py-4 transition-colors shadow-md">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-          <div>
-            <p class="font-bold text-sm leading-none">¿Querés analizar tu lote?</p>
-            <p class="text-white/80 text-xs mt-0.5">Escribinos por WhatsApp</p>
-          </div>
-        </a>
-
-        <p class="text-center text-xs text-earth-500">
-          Potrero © {new Date().getFullYear()} · Hecho en Bolivia 🇧🇴
-        </p>
       </aside>
+    </section>
+
+    {/* Barra fija en el celular: el resultado queda a la vista mientras cargás */}
+    <a href="#resultado" id="barra-movil" class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-potrero-900 text-white px-4 py-3 flex justify-between items-center gap-3 text-sm shadow-[0_-4px_12px_rgba(0,0,0,.15)]"></a>
+
+    {/* ════════════════ PESTAÑA 2: COMPARAR ════════════════ */}
+    <section id="panel-comparar" class="tab-panel hidden max-w-5xl mx-auto px-4 py-5 space-y-4"></section>
+
+    {/* ════════════════ PESTAÑA 3: CUÁNTO AGUANTA ════════════════ */}
+    <section id="panel-margenes" class="tab-panel hidden max-w-5xl mx-auto px-4 py-5 space-y-4">
+      <div class="card p-5 grid sm:grid-cols-2 gap-4">
+        <div class="field">
+          <label for="m-escenario">Escenario</label>
+          <select id="m-escenario"></select>
+        </div>
+        <div class="field">
+          <label for="m-objetivo">Resultado mínimo que querés por animal</label>
+          <div class="suffix"><input id="m-objetivo" type="number" step="50" value="0" /><span>Bs/animal</span></div>
+          <p class="hint">Con 0 ves el punto donde el negocio no gana ni pierde.</p>
+        </div>
+      </div>
+      <div id="m-limites"></div>
+      <div id="m-quepasa"></div>
+    </section>
+
+    <div class="max-w-5xl mx-auto px-4 pb-20 lg:pb-10">
+      <p class="text-xs text-earth-500">Potrero © {new Date().getFullYear()} · Hecho en Bolivia 🇧🇴</p>
     </div>
   </div>
 </Layout>
 
-<style>
-  /* ── Secciones plegables ── */
-  .calc-section {
-    @apply bg-white border border-earth-200 rounded-2xl overflow-hidden shadow-sm;
-  }
-  .sec-header {
-    @apply w-full flex items-center justify-between gap-3 px-5 py-4 text-left hover:bg-earth-50 transition-colors duration-150;
-  }
-  .sec-icon {
-    @apply w-9 h-9 rounded-xl flex items-center justify-center shrink-0;
-  }
-  .sec-chevron {
-    @apply text-earth-400 shrink-0 transition-transform duration-200;
-  }
-  .sec-header[aria-expanded="false"] .sec-chevron {
-    @apply rotate-180;
-  }
-  .sec-body {
-    @apply px-5 pb-5 border-t border-earth-100;
-  }
-  .sec-body.hidden {
-    display: none;
-  }
+<style is:global>
+  /* Estilo de potrerolatam.com: fondo crema, verde profundo, acento dorado, Lora en títulos */
+  .tab { @apply flex items-center gap-2 px-4 py-3.5 text-sm font-semibold text-earth-700 border-b-2 border-transparent whitespace-nowrap hover:text-potrero-800 transition-colors; }
+  .tab[aria-selected="true"] { @apply text-potrero-900 border-earth-400; }
+  .tab-n { @apply font-display text-base leading-none text-earth-400; }
+  .tab[aria-selected="true"] .tab-n { @apply text-earth-600; }
 
-  /* ── Campos ── */
-  .field-group {
-    @apply flex flex-col gap-1.5;
-  }
-  .field-group label {
-    @apply text-xs font-semibold text-potrero-800;
-  }
-  .field-group select,
-  .field-group input[type="number"] {
-    @apply w-full bg-earth-50 border border-earth-200 text-potrero-900 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-earth-400 focus:bg-white transition;
-  }
-  .input-suffix {
-    @apply flex items-center border border-earth-200 rounded-lg overflow-hidden focus-within:border-earth-400 focus-within:bg-white transition bg-earth-50;
-  }
-  .input-suffix input {
-    @apply flex-1 bg-transparent px-3 py-2.5 text-sm text-potrero-900 focus:outline-none border-none min-w-0;
-  }
-  .input-suffix span {
-    @apply bg-earth-100 border-l border-earth-200 px-3 py-2.5 text-xs text-earth-600 font-medium shrink-0;
-  }
-  .input-prefix {
-    @apply flex items-center border border-earth-200 rounded-lg overflow-hidden focus-within:border-earth-400 focus-within:bg-white transition bg-earth-50;
-  }
-  .input-prefix span {
-    @apply bg-earth-100 border-r border-earth-200 px-3 py-2.5 text-xs text-earth-600 font-medium shrink-0;
-  }
-  .input-prefix input {
-    @apply flex-1 bg-transparent px-3 py-2.5 text-sm text-potrero-900 focus:outline-none border-none min-w-0;
-  }
+  .card { @apply bg-earth-50 border border-earth-200 rounded-2xl shadow-warm-sm; }
+  .card-head { @apply flex items-center gap-3 px-5 pt-5 pb-4; }
+  .card-title { @apply font-display font-semibold text-potrero-900 text-lg tracking-tight leading-tight; }
+  .card-body { @apply px-5 pb-5; }
+  .sec-n { @apply font-display text-[1.75rem] leading-none tracking-tight text-earth-400 w-9 shrink-0; }
+
+  .field { @apply flex flex-col gap-1.5; }
+  .field label { @apply text-xs font-semibold text-potrero-800; }
+  .field select, .field > input { @apply w-full bg-white border border-earth-200 text-potrero-900 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-earth-400; }
+  .suffix { @apply flex items-center border border-earth-200 rounded-xl overflow-hidden bg-white focus-within:border-earth-400; }
+  .suffix input { @apply flex-1 bg-transparent px-3 py-2.5 text-sm text-potrero-900 tabular-nums focus:outline-none min-w-0; }
+  .suffix span { @apply bg-earth-100 border-l border-earth-200 px-2.5 py-2.5 text-[11px] text-earth-700 font-medium shrink-0 whitespace-nowrap; }
+  .hint { @apply text-xs text-earth-700 leading-relaxed; }
+  .calc-line { @apply mt-3 text-sm text-potrero-800 bg-earth-200/60 rounded-xl px-4 py-2.5; }
+  .note { @apply text-xs text-earth-800 bg-earth-200/50 border-l-[3px] border-earth-400 rounded-r-xl px-4 py-2.5 leading-relaxed; }
+  .more { @apply text-xs font-semibold text-potrero-600 cursor-pointer select-none; }
+  .check { @apply flex items-center gap-2 text-sm text-potrero-900; }
+  .check input { @apply w-4 h-4 accent-potrero-700; }
+  .pill { @apply px-3 py-1 rounded-md font-bold uppercase tracking-[0.08em] text-[0.68rem]; }
+  .pill-on { @apply bg-potrero-700 text-earth-300; }
+  .pill-off { @apply border-[1.5px] border-earth-300 text-earth-600; }
+
+  .seg { @apply grid sm:grid-cols-2 gap-2; }
+  .seg label { @apply flex items-center gap-2 border border-earth-200 rounded-xl px-3 py-2.5 text-sm cursor-pointer bg-white; }
+  .seg label:has(input:checked) { @apply border-potrero-700 bg-potrero-50 text-potrero-900 font-semibold; }
+  .seg input { @apply accent-potrero-700; }
+
+  .btn-primary { @apply inline-flex items-center justify-center bg-potrero-700 hover:bg-potrero-800 text-earth-100 text-sm font-semibold rounded-xl px-4 py-3 shadow-warm transition-all hover:-translate-y-0.5 hover:shadow-warm-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0; }
+  .btn-ghost { @apply border-2 border-potrero-700 text-potrero-800 hover:bg-potrero-700 hover:text-earth-100 text-sm font-semibold rounded-xl px-3 py-2.5 transition-colors; }
+  .btn-mini { @apply text-xs font-semibold text-potrero-700 hover:text-potrero-900 hover:underline; }
+
+  .kpi-label { @apply text-[11px] font-semibold uppercase tracking-[0.12em] text-earth-300/80; }
+  .kpi { @apply font-display text-[1.6rem] font-semibold leading-tight tracking-tight tabular-nums; }
+  .pos { @apply text-green-700; }
+  .neg { @apply text-red-600; }
+  .pos-d { @apply text-green-400; }
+  .neg-d { @apply text-red-400; }
+
+  .cmp th, .cmp td { @apply px-3 py-2.5 text-right whitespace-nowrap; }
+  .cmp th:first-child, .cmp td:first-child { @apply text-left sticky left-0 bg-earth-50 z-10; }
+  .cmp tbody tr { @apply border-t border-earth-100; }
+  .cmp .grp td { @apply bg-earth-100 text-[11px] uppercase tracking-wide text-earth-600 font-semibold py-1.5; }
+
+  input[type="range"] { @apply w-full accent-potrero-600; }
 </style>
 
 <script>
-  const $ = (id: string) => document.getElementById(id)!
-  const num = (id: string) => parseFloat(($(`f-${id}`) as HTMLInputElement).value) || 0
-  const fmt = (n: number, dec = 0) => n.toLocaleString('es-BO', { minimumFractionDigits: dec, maximumFractionDigits: dec })
-  const fmtPct = (n: number) => fmt(n, 1) + ' %'
+  import {
+    calcular, limites, escenarioEjemplo, CONCEPTOS_COSTO,
+    fechaCorta, epoca, sumarDias, type Escenario, type Resultado,
+  } from '../lib/simulador-calc'
 
-  // ── Accordion ──
-  document.querySelectorAll('.sec-header').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const expanded = btn.getAttribute('aria-expanded') === 'true'
-      const bodyId = btn.getAttribute('aria-controls')!
-      const body = document.getElementById(bodyId)!
-      btn.setAttribute('aria-expanded', String(!expanded))
-      body.classList.toggle('hidden', expanded)
-    })
-  })
+  const MAX = 5
+  const CLAVE = 'potrero-simulador-v1'
 
-  function calc() {
-    const cabezas      = Math.max(1, num('cabezas'))
-    const pesoIni      = num('peso-ini')
-    const precioCompra = num('precio-compra')
-    const dias         = Math.max(1, num('dias'))
-    const gmd          = num('gmd')
-    const alim         = num('alim')
-    const mo           = num('mo')
-    const sanidad      = num('sanidad')
-    const arriendo     = num('arriendo')
-    const otros        = num('otros')
-    const precioVenta  = num('precio-venta')
-    const rend         = num('rendimiento') / 100
+  // ── Estado ──
+  interface Estado { actual: Escenario; guardados: Escenario[]; editandoId: string | null }
+  let st: Estado = cargar()
 
-    const meses = dias / 30.44
-
-    const ganancia = gmd * dias
-    const pesoFin  = pesoIni + ganancia
-
-    const adqCab  = pesoIni * precioCompra
-    const adqLote = adqCab * cabezas
-
-    const costoAlim     = alim     * meses
-    const costoMo       = mo       * meses
-    const costoSanidad  = sanidad
-    const costoArriendo = arriendo * meses
-    const costoOtros    = otros
-    const totalOpCab    = costoAlim + costoMo + costoSanidad + costoArriendo + costoOtros
-    const totalOpLote   = totalOpCab * cabezas
-
-    const costoTotalCab  = adqCab + totalOpCab
-    const costoTotalLote = costoTotalCab * cabezas
-    const costoKg = ganancia > 0 ? totalOpCab / ganancia : 0
-
-    const ingCab  = pesoFin * precioVenta
-    const ingLote = ingCab * cabezas
-
-    const resCab  = ingCab  - costoTotalCab
-    const resLote = resCab  * cabezas
-
-    const agio = precioVenta - precioCompra
-
-    const margen    = costoTotalCab > 0 ? (resCab / costoTotalCab) * 100 : 0
-    const margenMes = meses > 0 ? margen / meses : 0
-    const roi       = adqLote + totalOpLote > 0 ? (resLote / (adqLote + totalOpLote)) * 100 : 0
-
-    $('tag-lote').textContent          = `${fmt(cabezas)} cab. · Bs ${fmt(precioCompra,2)}/kg PV`
-    $('tag-ciclo').textContent         = `${fmt(dias)} días · GMD ${fmt(gmd,3)} kg/día`
-    $('tag-costos-total').textContent  = fmt(totalOpCab, 0)
-    $('tag-venta').textContent         = `Bs ${fmt(precioVenta,2)}/kg PV · Rend. ${fmt(num('rendimiento'),0)} %`
-
-    $('calc-inv-cab').textContent  = fmt(adqCab)
-    $('calc-inv-lote').textContent = fmt(adqLote)
-
-    $('calc-p-ini').textContent    = fmt(pesoIni, 1)
-    $('calc-ganancia').textContent = fmt(ganancia, 1)
-    $('calc-p-fin').textContent    = fmt(pesoFin, 1)
-
-    $('r-cabezas').textContent    = fmt(cabezas)
-    $('r-kg-gan').textContent     = fmt(ganancia, 1)
-    $('r-dias').textContent       = fmt(dias)
-    $('r-ing-cab').textContent    = fmt(ingCab)
-    $('r-ing-lote').textContent   = fmt(ingLote)
-    $('r-adq-cab').textContent    = fmt(adqCab)
-    $('r-op-cab').textContent     = fmt(totalOpCab)
-    $('r-costo-kg').textContent   = fmt(costoKg, 2)
-    $('r-res-cab').textContent    = `Bs ${fmt(resCab)}`
-    $('r-res-lote').textContent   = `Bs ${fmt(resLote)}`
-    $('r-margen').textContent     = fmtPct(margen)
-    $('r-margen-mes').textContent = fmtPct(margenMes)
-    $('r-roi').textContent        = fmtPct(roi)
-    $('r-agio').textContent       = `Bs ${fmt(agio, 2)}/kg`
-
-    const panelRes    = $('panel-resultado')
-    const resLabel    = $('res-label')
-    const resLoteEl   = $('r-res-lote')
-    const resCabEl    = $('r-res-cab')
-    const agioEl      = $('r-agio')
-    const margenEl    = $('r-margen')
-    const margenMesEl = $('r-margen-mes')
-    const roiEl       = $('r-roi')
-
-    const positivo = resCab > 0
-
-    panelRes.className = positivo
-      ? 'rounded-2xl p-5 border-2 transition-all duration-300 bg-green-50 border-green-300'
-      : 'rounded-2xl p-5 border-2 transition-all duration-300 bg-red-50 border-red-200'
-
-    resLabel.className    = positivo ? 'text-xs font-bold uppercase tracking-widest mb-3 text-green-700' : 'text-xs font-bold uppercase tracking-widest mb-3 text-red-600'
-    resLabel.textContent  = positivo ? '✓ Operación rentable' : '✗ Operación no rentable'
-    agioEl.className      = agio >= 0 ? 'text-2xl font-bold leading-none text-green-700' : 'text-2xl font-bold leading-none text-red-600'
-    resCabEl.className    = `font-bold ${positivo ? 'text-green-700' : 'text-red-600'}`
-    resLoteEl.className   = `font-bold text-lg ${positivo ? 'text-green-700' : 'text-red-600'}`
-    margenEl.className    = `font-bold text-base mt-0.5 ${margen >= 0 ? 'text-green-700' : 'text-red-600'}`
-    margenMesEl.className = `font-bold text-base mt-0.5 ${margenMes >= 0 ? 'text-green-700' : 'text-red-600'}`
-    roiEl.className       = `font-bold text-base mt-0.5 ${roi >= 0 ? 'text-green-700' : 'text-red-600'}`
-
-    const rows = [
-      ['Alimentación / suplementación', costoAlim,     costoAlim * cabezas],
-      ['Mano de obra',                   costoMo,       costoMo * cabezas],
-      ['Sanidad / veterinario',          costoSanidad,  costoSanidad * cabezas],
-      ['Arrendamiento',                  costoArriendo, costoArriendo * cabezas],
-      ['Otras despesas',                 costoOtros,    costoOtros * cabezas],
-    ]
-
-    const tbody = $('tabla-costos')
-    tbody.innerHTML = rows.map(([label, cab, lote]) => `
-      <tr class="text-sm ${(cab as number) === 0 ? 'text-earth-400' : 'text-potrero-900'}">
-        <td class="px-4 py-2">${label}</td>
-        <td class="text-right px-4 py-2">Bs ${fmt(cab as number)}</td>
-        <td class="text-right px-4 py-2">Bs ${fmt(lote as number)}</td>
-      </tr>
-    `).join('')
-
-    $('tfoot-cab').textContent  = fmt(totalOpCab)
-    $('tfoot-lote').textContent = fmt(totalOpLote)
+  function cargar(): Estado {
+    try {
+      const raw = localStorage.getItem(CLAVE)
+      if (raw) {
+        const s = JSON.parse(raw)
+        const base = escenarioEjemplo()
+        const fix = (e: Partial<Escenario>): Escenario => ({ ...base, ...e, detallado: { ...base.detallado, ...(e.detallado || {}) } })
+        return {
+          actual: fix(s.actual || {}),
+          guardados: Array.isArray(s.guardados) ? s.guardados.slice(0, MAX).map(fix) : [],
+          editandoId: s.editandoId ?? null,
+        }
+      }
+    } catch { /* sin almacenamiento: seguimos con el ejemplo */ }
+    return { actual: escenarioEjemplo(), guardados: [], editandoId: null }
+  }
+  function persistir() {
+    try { localStorage.setItem(CLAVE, JSON.stringify(st)) } catch { /* nada */ }
   }
 
-  document.querySelectorAll('#calc-form input, #calc-form select').forEach(el => {
-    el.addEventListener('input', calc)
-  })
+  // ── Formato ──
+  const nf = (n: number, d = 0) => (Number.isFinite(n) ? n : 0).toLocaleString('es-BO', { minimumFractionDigits: d, maximumFractionDigits: d })
+  const bs = (n: number, d = 0) => (n < 0 ? '−' : '') + 'Bs ' + nf(Math.abs(n), d)
+  const bsSigno = (n: number, d = 0) => (n > 0 ? '+' : n < 0 ? '−' : '') + 'Bs ' + nf(Math.abs(n), d)
+  const pc = (f: number, d = 1) => (f < 0 ? '−' : '') + nf(Math.abs(f * 100), d) + ' %'
+  const meses = (m: number) => nf(m, 1) + (Math.abs(m - 1) < 0.05 ? ' mes' : ' meses')
+  const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!))
+  const cls = (n: number, dark = false) => (n >= 0 ? (dark ? 'pos-d' : 'pos') : (dark ? 'neg-d' : 'neg'))
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T
+  const nombreDe = (e: Escenario, i?: number) => e.nombre?.trim() || (i !== undefined ? `Escenario ${i + 1}` : 'Sin nombre')
+  const uid = () => Math.random().toString(36).slice(2, 9)
 
-  calc()
+  // ── Formulario ⇄ estado ──
+  const form = $('form')
+  function escribirForm(e: Escenario) {
+    form.querySelectorAll<HTMLInputElement>('[data-k]').forEach(el => {
+      const k = el.dataset.k!
+      const v = k.startsWith('detallado.') ? e.detallado[k.split('.')[1] as keyof Escenario['detallado']] : (e as any)[k]
+      if (el.type === 'radio') el.checked = el.value === v
+      else el.value = v ?? ''
+    })
+    form.querySelectorAll<HTMLInputElement>('[data-incluye]').forEach(el => { el.checked = e.incluye.includes(el.dataset.incluye!) })
+  }
+  function leerForm(): Escenario {
+    const e: Escenario = { ...st.actual, detallado: { ...st.actual.detallado } }
+    form.querySelectorAll<HTMLInputElement>('[data-k]').forEach(el => {
+      const k = el.dataset.k!
+      if (el.type === 'radio') { if (el.checked) (e as any)[k] = el.value; return }
+      if (el.type === 'text' || el.type === 'date') { (e as any)[k] = el.value; return }
+      const v = parseFloat(el.value)
+      const n = Number.isFinite(v) ? v : 0
+      if (k.startsWith('detallado.')) (e.detallado as any)[k.split('.')[1]] = n
+      else (e as any)[k] = n
+    })
+    e.incluye = [...form.querySelectorAll<HTMLInputElement>('[data-incluye]')].filter(x => x.checked).map(x => x.dataset.incluye!)
+    return e
+  }
+
+  // ── Textos de apoyo ──
+  function noIncluye(e: Escenario): string[] {
+    const fuera: string[] = []
+    if (e.modoCosto === 'simple') {
+      CONCEPTOS_COSTO.forEach(c => { if (!e.incluye.includes(c.id)) fuera.push(c.label.toLowerCase()) })
+    } else {
+      CONCEPTOS_COSTO.forEach(c => { if (!(e.detallado[c.id] > 0)) fuera.push(c.label.toLowerCase()) })
+    }
+    return [...fuera, ...(e.mortandad > 0 ? [] : ['mortandad']), 'impuestos', 'intereses o costo de tu plata']
+  }
+
+  // ── Pestaña 1 ──
+  function pintarNegocio() {
+    const e = st.actual
+    const r = calcular(e)
+
+    $('costo-simple').classList.toggle('hidden', e.modoCosto !== 'simple')
+    $('costo-detallado').classList.toggle('hidden', e.modoCosto !== 'detallado')
+    $('salida-peso').classList.toggle('hidden', e.modoVenta === 'fecha')
+    $('salida-fecha').classList.toggle('hidden', e.modoVenta !== 'fecha')
+    const diasEl = $<HTMLInputElement>('f-dias')
+    if (document.activeElement !== diasEl) diasEl.value = r.dias > 0 && e.modoVenta === 'fecha' ? String(Math.round(r.dias)) : ''
+
+    $('txt-fechas').innerHTML = r.ok && r.fechaCompra
+      ? `Entra el <strong>${fechaCorta(r.fechaCompra)}</strong> (${epoca(r.fechaCompra)}) y sale el <strong>${fechaCorta(r.fechaVenta)}</strong> (${epoca(r.fechaVenta)}):
+         <strong>${nf(r.dias)} días</strong>, ${meses(r.meses)}.
+         ${e.modoVenta === 'fecha' ? `Con ${nf(e.gdp, 2)} kg/día sale con <strong>${nf(r.pesoVenta)} kg vivos</strong>.` : `A ${nf(e.gdp, 2)} kg/día es lo que tarda en llegar a ${nf(r.pesoVenta)} kg.`}`
+      : r.errores.filter(x => /fecha|salida/i.test(x)).map(esc).join(' ') || 'Completá los datos para ver las fechas.'
+
+    $('txt-compra').innerHTML = e.pesoCompra > 0
+      ? `Pagás <strong>${nf(r.pesoPagadoCompra, 1)} kg</strong> (${nf(e.pesoCompra)} kg vivos − ${nf(e.desbasteCompra, 1)} % de desbaste) → <strong>${bs(r.valorCompra)}</strong>${r.gastosCompra > 0 ? ` + ${bs(r.gastosCompra)} de gastos` : ''}.
+         <br>Precio total de compra: <strong>${bs(r.precioTotalCompraKg, 2)} por kg pagado</strong>, todo incluido.`
+      : 'Cargá el peso de compra.'
+    const gancho = e.tipoVenta === 'gancho'
+    $('campo-desbasteVenta').classList.toggle('hidden', gancho)
+    $('unidad-precioVenta').textContent = gancho ? 'Bs/kg gancho' : 'Bs/kg vivo'
+    $('campo-rendGancho').classList.toggle('hidden', !gancho)
+    const descuentos = r.comisionVentaBs + e.fleteVenta > 0 ? `, ya descontados ${bs(r.comisionVentaBs + e.fleteVenta)} de comisión y flete` : ''
+    $('txt-venta').innerHTML = r.pesoVenta > 0 && r.ok
+      ? gancho
+        ? `Sale con <strong>${nf(r.pesoVenta)} kg vivos</strong> × ${nf(e.rendGancho, 1)} % de rendimiento = <strong>${nf(r.pesoPagadoVenta, 1)} kg gancho</strong> a ${bs(e.precioVenta, 2)} → cobrás <strong>${bs(r.ingresoNeto)}</strong> por animal${descuentos}.
+           <br>Equivale a <strong>${bs(r.precioNetoVentaKg, 2)} por kg vivo</strong>, para comparar con la compra.`
+        : `Sale con <strong>${nf(r.pesoVenta)} kg vivos</strong>; el desbaste de ${nf(e.desbasteVenta, 1)} % le saca ${nf(r.kgDesbasteVenta, 1)} kg → te pagan <strong>${nf(r.pesoPagadoVenta, 1)} kg</strong> a ${bs(e.precioVenta, 2)} y cobrás <strong>${bs(r.ingresoNeto)}</strong> por animal${descuentos}.`
+      : 'Completá las fechas o el peso de salida.'
+    $('txt-tiempo').innerHTML = r.kgProducir > 0 && e.gdp > 0
+      ? `Entra con <strong>${nf(r.pesoInicio)} kg</strong> y produce <strong>${nf(r.kgProducir)} kg</strong> en ${nf(r.dias)} días.`
+      : 'Con estos datos no se puede calcular cuánto produce.'
+    $('txt-detallado').innerHTML = r.ok
+      ? `${bs(r.costoMensual)} por mes × ${meses(r.meses)} = <strong>${bs(r.costoProduccion)}</strong> por animal. Equivale a <strong>${bs(r.costoKgProducido, 2)} por kg producido</strong>.`
+      : ''
+
+    pintarResultado(e, r)
+    pintarDetalle(e, r)
+    pintarGuardados()
+  }
+
+  function pintarResultado(e: Escenario, r: Resultado) {
+    const barra = $('barra-movil')
+    barra.classList.toggle('!hidden', tab !== 'negocio')
+    barra.innerHTML = r.ok
+      ? `<span>Compra total <strong>${bs(r.precioTotalCompraKg, 2)}/kg</strong></span><span>Resultado <strong class="${cls(r.resultado, true)}">${bsSigno(r.resultado)}</strong> · ${nf(r.dias)} d</span>`
+      : '<span>Faltan datos para calcular</span>'
+    const box = $('resultado')
+    if (!r.ok) {
+      box.innerHTML = `<p class="kpi-label mb-3">Resultado</p><ul class="text-sm text-earth-200 space-y-1.5">${r.errores.map(x => `<li>• ${esc(x)}</li>`).join('')}</ul>`
+      return
+    }
+    const gana = r.resultado >= 0
+    const l = limites(e)
+    const maxTot = l.precioMaxTotalCompraKg ?? 0
+    const holgura = maxTot - r.precioTotalCompraKg
+    box.innerHTML = `
+      <p class="kpi-label mb-3">${esc(nombreDe(e))}</p>
+      <div class="rounded-xl bg-black/20 border border-earth-400/30 p-4 mb-4">
+        <p class="kpi-label !text-earth-400">Precio total de compra</p>
+        <p class="font-display text-[2.1rem] font-semibold leading-none tracking-tight tabular-nums mt-1">${bs(r.precioTotalCompraKg, 2)}<span class="text-base font-normal text-earth-300">/kg</span></p>
+        <p class="text-[11px] text-earth-300/80 mt-1">precio + flete + comisión + otros, por kg pagado</p>
+        <div class="mt-3 pt-3 border-t border-earth-400/20 text-sm flex justify-between gap-2">
+          <span class="text-earth-200">Podés pagar hasta</span>
+          <strong class="tabular-nums">${maxTot > 0 ? `${bs(maxTot, 2)}/kg` : 'nada'}</strong>
+        </div>
+        <p class="text-xs mt-1 ${holgura >= 0 ? 'pos-d' : 'neg-d'}">
+          ${holgura >= 0 ? `Te sobran ${bs(holgura, 2)} por kg (${pc(holgura / r.precioTotalCompraKg)}) antes de perder plata.` : `Estás pagando ${bs(-holgura, 2)} por kg de más: con esta venta y estos costos perdés plata.`}
+        </p>
+      </div>
+      <p class="font-display text-[1.15rem] leading-snug text-earth-100">
+        Con estos supuestos, cada animal ${gana ? 'deja' : 'pierde'} <strong class="${cls(r.resultado, true)}">${bs(Math.abs(r.resultado))}</strong>
+        después de <strong>${meses(r.meses)}</strong>, poniendo <strong>${bs(r.plataNecesaria)}</strong>.
+      </p>
+      <div class="grid grid-cols-2 gap-x-4 gap-y-4 mt-5">
+        <div>
+          <p class="kpi-label">Plata necesaria</p>
+          <p class="kpi">${bs(r.plataNecesaria)}</p>
+          <p class="text-[11px] text-earth-400">por animal · lote ${bs(r.plataLote)}</p>
+        </div>
+        <div>
+          <p class="kpi-label">Resultado</p>
+          <p class="kpi ${cls(r.resultado, true)}">${bsSigno(r.resultado)}</p>
+          <p class="text-[11px] text-earth-400">por animal · lote ${bsSigno(r.resultadoLote)}</p>
+        </div>
+        <div>
+          <p class="kpi-label">Salida</p>
+          <p class="kpi !text-[1.35rem]">${fechaCorta(r.fechaVenta)}</p>
+          <p class="text-[11px] text-earth-400">entra ${fechaCorta(r.fechaCompra)} · ${nf(r.dias)} días</p>
+        </div>
+        <div>
+          <p class="kpi-label">Rendimiento</p>
+          <p class="kpi ${cls(r.resultado, true)}">${pc(r.rendimientoCiclo)}</p>
+          <p class="text-[11px] text-earth-400">en el ciclo, sobre la plata puesta</p>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-potrero-700 text-sm flex justify-between gap-2">
+        <span class="text-earth-300">Rentabilidad mensual</span>
+        <span class="font-semibold ${cls(r.rentabilidadMensual, true)}">${pc(r.rentabilidadMensual, 2)} <span class="text-[11px] font-normal text-earth-400">promedio</span></span>
+      </div>
+      <div class="mt-3 pt-3 border-t border-potrero-700 text-sm">
+        <p class="kpi-label mb-1.5">Totales del lote · ${nf(e.cabezas)} animales</p>
+        <div class="flex justify-between gap-2"><span class="text-earth-300">Compra (con gastos)</span><span class="tabular-nums">${bs(r.compraLote)}</span></div>
+        <div class="flex justify-between gap-2"><span class="text-earth-300">Producción</span><span class="tabular-nums">${bs(r.produccionLote)}</span></div>
+        <div class="flex justify-between gap-2"><span class="text-earth-300">Venta${e.mortandad > 0 ? ` (${nf(r.animalesVendidos, 1)} animales)` : ''}</span><span class="tabular-nums">${bs(r.ventaLote)}</span></div>
+        <div class="flex justify-between gap-2 font-semibold mt-1"><span>Resultado</span><span class="tabular-nums ${cls(r.resultadoLote, true)}">${bsSigno(r.resultadoLote)}</span></div>
+      </div>
+      <p class="mt-3 text-[11px] leading-relaxed text-earth-400">
+        No es ganancia neta: es el resultado sobre los costos que cargaste. No incluye ${noIncluye(e).join(', ')}.
+        El rendimiento es del ciclo de ${meses(r.meses)}; la rentabilidad mensual es ese rendimiento ÷ los meses, no es una tasa anual.
+      </p>`
+  }
+
+  function pintarDetalle(e: Escenario, r: Resultado) {
+    const body = $('detalle-body')
+    if (!r.ok) { body.innerHTML = '<p class="text-earth-600">Completá los datos para ver el detalle.</p>'; return }
+    const p = r.puente
+    const fila = (t: string, v: number, sub: string) => `
+      <div class="flex justify-between gap-4 py-2 border-t border-earth-100">
+        <div><p class="text-potrero-900">${t}</p><p class="text-xs text-earth-600">${sub}</p></div>
+        <p class="font-semibold whitespace-nowrap ${cls(v)}">${bsSigno(v)}</p>
+      </div>`
+    const costoTotalKgVendido = r.plataNecesaria / r.pesoPagadoVenta
+    const ind = (t: string, v: string, sub: string, color = 'text-potrero-900') => `
+      <div class="bg-earth-200/50 rounded-xl p-3">
+        <p class="text-xs text-earth-700">${t}</p>
+        <p class="font-display font-semibold text-lg tabular-nums ${color}">${v}</p>
+        <p class="text-xs text-earth-700 mt-1 leading-relaxed">${sub}</p>
+      </div>`
+    const paso = (n: string, t: string) => `
+      <li class="flex gap-3 py-2 border-t border-earth-200/70">
+        <span class="font-display text-earth-500 w-4 shrink-0">${n}</span><span class="text-potrero-800">${t}</span>
+      </li>`
+    const agioCaro = r.agioKg > 0
+    const gancho = e.tipoVenta === 'gancho'
+    body.innerHTML = `
+      <div>
+        <p class="font-semibold text-potrero-900 mb-1">De dónde sale el resultado (por animal)</p>
+        ${fila('Ágio de compra', p.agio,
+          `${nf(r.pesoPagadoCompra)} kg comprados a ${bs(r.precioTotalCompraKg, 2)} que al vender valen ${bs(r.precioNetoVentaKg, 2)}`)}
+        ${fila('Margen de los kg producidos', p.margenKgProducidos,
+          `${nf(r.kgProducir)} kg producidos a ${bs(r.costoKgProducido, 2)} que se venden a ${bs(r.precioNetoVentaKg, 2)}`)}
+        ${e.tipoVenta === 'gancho' ? '' : fila('Desbaste en la venta', p.desbasteVenta, `${nf(r.kgDesbasteVenta, 1)} kg que no te pagan (${nf(e.desbasteVenta, 1)} % de ${nf(r.pesoVenta)} kg)`)}
+        ${e.mortandad > 0 ? fila('Mortandad', p.mortandad, `${nf(e.mortandad, 1)} % de los animales no llega a la venta`) : ''}
+        <div class="flex justify-between gap-4 py-2 border-t-2 border-earth-300 font-bold">
+          <p>Resultado</p><p class="${cls(r.resultado)}">${bsSigno(r.resultado)}</p>
+        </div>
+      </div>
+
+      <div>
+        <p class="font-semibold text-potrero-900 mb-1">El ágio de compra, paso a paso</p>
+        <ol class="list-none text-sm">
+          ${paso('1', gancho
+            ? `Precio de compra <strong>${bs(e.precioCompra, 2)}</strong> por kg vivo. Precio de venta ${bs(e.precioVenta, 2)} por kg gancho × ${nf(e.rendGancho, 1)} % de rendimiento = <strong>${bs(e.precioVenta * e.rendGancho / 100, 2)}</strong> por kg vivo.`
+            : `Precio de compra <strong>${bs(e.precioCompra, 2)}</strong> y precio de venta <strong>${bs(e.precioVenta, 2)}</strong>, los dos por kg vivo pagado.`)}
+          ${paso('2', `Ágio: ${bs(e.precioCompra, 2)} ÷ ${bs(gancho ? e.precioVenta * e.rendGancho / 100 : e.precioVenta, 2)} − 1 = <strong class="${r.agioPct > 0 ? 'neg' : 'pos'}">${pc(r.agioPct)}</strong>. ${r.agioPct > 0 ? `Pagás el kg flaco ${pc(r.agioPct)} más caro que el kg gordo.` : `Pagás el kg flaco ${pc(-r.agioPct)} más barato que el kg gordo.`}`)}
+          ${paso('3', `Sumando flete, comisión y otros de la compra (<strong>${bs(r.precioTotalCompraKg, 2)}</strong> por kg) y descontando comisión y flete de la venta (<strong>${bs(r.precioNetoVentaKg, 2)}</strong> por kg): ágio total <strong class="${agioCaro ? 'neg' : 'pos'}">${pc(r.agioPctTotal)}</strong>.`)}
+          ${paso('4', `En plata: ${bs(Math.abs(r.agioKg), 2)} por kg × ${nf(r.pesoPagadoCompra)} kg comprados = <strong class="${agioCaro ? 'neg' : 'pos'}">${bs(Math.abs(r.agioTotal))}</strong> que ${agioCaro ? 'perdés' : 'ganás'} en los kg comprados, antes de producir nada.`)}
+          ${agioCaro ? paso('5', r.kgParaCubrirAgio !== null
+            ? `Cada kg que producís deja <strong>${bs(r.margenPorKgProducido, 2)}</strong> (${bs(r.precioNetoVentaKg, 2)} − ${bs(r.costoKgProducido, 2)} de costo). Para cubrir el ágio tenés que producir <strong>${nf(r.kgParaCubrirAgio)} kg</strong>. Producís ${nf(r.kgProducir)} kg${r.kgProducir > r.kgParaCubrirAgio ? `: los ${nf(r.kgProducir - r.kgParaCubrirAgio)} kg que sobran son los que dejan plata` : ': no alcanza para cubrirlo'}.`
+            : `Cada kg que producís cuesta más de lo que vale (${bsSigno(r.margenPorKgProducido, 2)}): producir no recupera el ágio.`) : ''}
+        </ol>
+        <p class="hint mt-2">${gancho
+          ? 'Vendiendo al gancho, el rendimiento sirve para llevar el precio por kg gancho a kg vivo y poder compararlo con la compra.'
+          : 'El desbaste no cambia el precio: descuenta kilos. Por eso aparece aparte, como kg que no te pagan.'}</p>
+      </div>
+
+      <div>
+        <p class="font-semibold text-potrero-900 mb-2">Indicadores por kg</p>
+        <div class="grid sm:grid-cols-2 gap-3">
+          ${ind('Precio total de compra', `${bs(r.precioTotalCompraKg, 2)}/kg`,
+            `Precio ${bs(e.precioCompra, 2)} + flete, comisión y otros, por kg pagado. Es el que se compara con el máximo que podés pagar.`)}
+          ${ind('Precio neto de venta', `${bs(r.precioNetoVentaKg, 2)}/kg${gancho ? ' vivo' : ''}`,
+            gancho ? `Precio ${bs(e.precioVenta, 2)} por kg gancho × rendimiento − comisión y flete, llevado a kg vivo.` : `Precio ${bs(e.precioVenta, 2)} − comisión y flete, por kg pagado. El desbaste va aparte, en kilos.`)}
+          ${ind('Ágio', `${pc(r.agioPct)}`,
+            `Precio de compra ÷ precio de venta − 1${gancho ? ' (venta llevada a kg vivo)' : ''}. Con flete, comisión y gastos: ${pc(r.agioPctTotal)}.`, r.agioPct > 0 ? 'neg' : 'pos')}
+          ${ind('Relación compra / venta', `${nf(r.relacionCompraVenta, 2)} kg`,
+            `Kg comprados que paga 1 kg vendido. ${r.relacionCompraVenta < 1 ? 'Menos de 1: el kg flaco es más caro que el gordo.' : 'Más de 1: el kg gordo vale más que el flaco.'}`)}
+          ${ind('Costo por kg producido', `${bs(r.costoKgProducido, 2)}/kg`,
+            'Lo que cuesta producir cada kg nuevo en tu campo.')}
+          ${ind('Margen bruto por kg producido', `${bsSigno(r.margenPorKgProducido, 2)}/kg`,
+            'Precio neto de venta − costo por kg producido. Lo que deja cada kg producido, sin contar la compra.', cls(r.margenPorKgProducido))}
+          ${ind('Resultado por kg producido', `${bsSigno(r.resultadoPorKgProducido, 2)}/kg`,
+            `Resultado del animal ÷ ${nf(r.kgProducir)} kg producidos. Ya incluye el ágio y el desbaste.`, cls(r.resultadoPorKgProducido))}
+          ${ind('Costo total por kg vendido', `${bs(costoTotalKgVendido, 2)}/kg`,
+            `Toda la plata puesta ÷ kg que te pagan. Comparalo con tu precio de venta (${bs(e.precioVenta, 2)}).`)}
+        </div>
+      </div>
+
+      ${gancho ? `<div>
+        <p class="font-semibold text-potrero-900 mb-2">En kg gancho <span class="font-normal text-earth-600">(rendimiento ${nf(e.rendGancho, 1)} %)</span></p>
+        <div class="grid sm:grid-cols-3 gap-3">
+          ${ind('Kg gancho del animal', `${nf(r.pesoGancho)} kg`, `${nf(r.pesoVenta)} kg vivos × ${nf(e.rendGancho, 1)} %.`)}
+          ${ind('Precio neto por kg gancho', `${bs(r.precioNetoVentaGancho, 2)}/kg`, 'Lo que cobrás ÷ kg gancho. Sirve para comparar con precios de frigorífico.')}
+          ${ind('Costo por kg gancho producido', `${bs(r.costoKgGanchoProducido, 2)}/kg`, 'Costo por kg producido ÷ rendimiento.')}
+        </div>
+        <p class="hint mt-2">El costo por kg gancho es aproximado: supone el mismo rendimiento para todo el animal.</p>
+      </div>` : ''}
+
+      <div>
+        <p class="font-semibold text-potrero-900 mb-1">Plata comprometida en el tiempo</p>
+        <p class="text-potrero-800">
+          El día de la compra ponés <strong>${bs(r.valorCompra + r.gastosCompra)}</strong> por animal.
+          Durante ${meses(r.meses)} se suman unos <strong>${bs(r.costoMensual)}</strong> por mes de producción, hasta llegar a <strong>${bs(r.plataNecesaria)}</strong> antes de vender.
+          Para el lote de ${nf(e.cabezas)} animales: <strong>${bs(r.plataLote)}</strong>.
+        </p>
+        <p class="hint mt-1">Ganar lo mismo en menos meses libera la plata antes para otro negocio. Por eso mostramos también el resultado por mes.</p>
+      </div>`
+  }
+
+  // ── Guardados ──
+  function pintarGuardados() {
+    const g = st.guardados
+    $('tab-count').textContent = `(${g.length})`
+    const box = $('guardados')
+    const editando = g.find(x => x.id === st.editandoId)
+    box.innerHTML = `
+      <div class="flex items-center justify-between gap-3 mb-2">
+        <p class="card-title !text-base">Escenarios guardados <span class="text-earth-500 font-normal">${g.length}/${MAX}</span></p>
+        <button type="button" class="btn-mini whitespace-nowrap" data-act="limpiar">Empezar uno nuevo</button>
+      </div>
+      ${g.length === 0
+        ? `<p class="hint">Cargá un negocio y tocá <strong>Guardar escenario</strong>. Después duplicalo y cambiá algo (otro precio, otra GDP) para compararlos.</p>`
+        : `<ul class="space-y-1.5">${g.map((x, i) => {
+            const r = calcular(x)
+            const activo = x.id === st.editandoId
+            const sinGuardar = activo && JSON.stringify({ ...st.actual, id: x.id }) !== JSON.stringify(x)
+            return `<li class="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl px-3 py-2 ${activo ? 'bg-potrero-50 border border-potrero-300' : 'bg-earth-50 border border-earth-200'}">
+              <span class="font-semibold text-sm text-potrero-900 flex-1 min-w-[8rem]">${esc(nombreDe(x, i))}${activo ? ` <span class="text-[11px] font-normal ${sinGuardar ? 'text-amber-700' : 'text-potrero-600'}">· ${sinGuardar ? 'cambios sin guardar' : 'abierto'}</span>` : ''}</span>
+              <span class="text-xs ${r.ok ? cls(r.resultado) : 'text-earth-500'}">${r.ok ? `${bsSigno(r.resultado)} · ${nf(r.dias)} días` : 'incompleto'}</span>
+              <span class="flex gap-3">
+                ${activo ? '' : `<button type="button" class="btn-mini" data-act="abrir" data-id="${x.id}">Abrir</button>`}
+                <button type="button" class="btn-mini" data-act="duplicar" data-id="${x.id}" ${g.length >= MAX ? 'disabled title="Máximo 5"' : ''}>Duplicar</button>
+                <button type="button" class="btn-mini !text-red-600" data-act="borrar" data-id="${x.id}">Borrar</button>
+              </span>
+            </li>`
+          }).join('')}</ul>`}
+    `
+    $('btn-guardar').textContent = editando ? 'Guardar cambios' : 'Guardar escenario'
+    $('btn-nuevo').classList.toggle('hidden', !editando)
+    ;($('btn-guardar') as HTMLButtonElement).disabled = !editando && g.length >= MAX
+    ;($('btn-nuevo') as HTMLButtonElement).disabled = g.length >= MAX
+    if (!editando && g.length >= MAX) $('msg-guardar').textContent = 'Ya tenés 5 escenarios. Borrá uno para guardar otro.'
+  }
+
+  function mensaje(t: string) {
+    $('msg-guardar').textContent = t
+    setTimeout(() => { if ($('msg-guardar').textContent === t) $('msg-guardar').textContent = '' }, 3500)
+  }
+
+  function guardar(comoNuevo: boolean) {
+    const e = { ...st.actual }
+    if (!e.nombre.trim()) e.nombre = `Escenario ${st.guardados.length + 1}`
+    const i = st.guardados.findIndex(x => x.id === st.editandoId)
+    if (!comoNuevo && i >= 0) {
+      st.guardados[i] = { ...e, id: st.editandoId! }
+      mensaje(`Se guardaron los cambios en "${e.nombre}".`)
+    } else {
+      if (st.guardados.length >= MAX) { mensaje('Ya tenés 5 escenarios. Borrá uno para guardar otro.'); return }
+      const nuevo = { ...e, id: uid() }
+      if (comoNuevo && st.guardados.some(x => x.nombre === nuevo.nombre)) nuevo.nombre += ' (2)'
+      st.guardados.push(nuevo)
+      st.editandoId = nuevo.id
+      mensaje(`Guardado como "${nuevo.nombre}".`)
+    }
+    st.actual = { ...st.guardados.find(x => x.id === st.editandoId)! }
+    escribirForm(st.actual)
+    persistir()
+    pintarTodo()
+  }
+
+  $('guardados').addEventListener('click', ev => {
+    const b = (ev.target as HTMLElement).closest<HTMLButtonElement>('[data-act]')
+    if (!b || b.disabled) return
+    const act = b.dataset.act, id = b.dataset.id
+    const x = st.guardados.find(g => g.id === id)
+    if (act === 'abrir' && x) { st.actual = structuredClone(x); st.editandoId = x.id }
+    if (act === 'duplicar' && x && st.guardados.length < MAX) {
+      const copia = { ...structuredClone(x), id: uid(), nombre: `${x.nombre} (copia)`.slice(0, 40) }
+      st.guardados.push(copia)
+      st.actual = structuredClone(copia); st.editandoId = copia.id
+      mensaje('Copia creada. Cambiá lo que quieras y tocá Guardar cambios.')
+    }
+    if (act === 'borrar' && x) {
+      if (!confirm(`¿Borrar "${x.nombre}"?`)) return
+      st.guardados = st.guardados.filter(g => g.id !== id)
+      if (st.editandoId === id) st.editandoId = null
+    }
+    if (act === 'limpiar') { st.actual = { ...escenarioEjemplo(), nombre: '' }; st.editandoId = null }
+    escribirForm(st.actual)
+    persistir()
+    pintarTodo()
+  })
+  $('btn-guardar').addEventListener('click', () => guardar(false))
+  $('btn-nuevo').addEventListener('click', () => guardar(true))
+
+  form.addEventListener('input', ev => {
+    // "días en tu campo" no se guarda: mueve la fecha de salida
+    const t = ev.target as HTMLInputElement
+    if (t.id === 'f-dias') {
+      const d = parseInt(t.value, 10)
+      const f = d > 0 ? sumarDias($<HTMLInputElement>('f-fechaCompra').value, d) : null
+      if (f) $<HTMLInputElement>('f-fechaVenta').value = f
+    }
+    st.actual = leerForm(); persistir(); pintarNegocio()
+  })
+  form.addEventListener('change', () => { st.actual = leerForm(); persistir(); pintarNegocio() })
+
+  // ── Pestaña 2: comparar ──
+  let refId: string | null = null
+  function pintarComparar() {
+    const panel = $('panel-comparar')
+    const g = st.guardados
+    if (g.length < 2) {
+      panel.innerHTML = `<div class="card p-6 text-sm text-potrero-800 space-y-2">
+        <p class="font-semibold">Necesitás al menos 2 escenarios guardados para comparar.</p>
+        <p class="hint">En <strong>Mi negocio</strong>: guardá el negocio, tocá <strong>Duplicar</strong> y cambiá algo — por ejemplo una alimentación más cara que da más GDP. Guardá los cambios y volvé acá.</p>
+        <p class="hint">Tenés ${g.length} guardado${g.length === 1 ? '' : 's'}.</p></div>`
+      return
+    }
+    if (!g.some(x => x.id === refId)) refId = g[0].id
+    const rs = g.map(x => ({ e: x, r: calcular(x), l: limites(x) }))
+    const ref = rs.find(x => x.e.id === refId)!
+
+    const fila = (t: string, f: (x: typeof rs[number]) => string, sub = '') =>
+      `<tr><td><span class="text-potrero-900">${t}</span>${sub ? `<br><span class="text-[11px] text-earth-500">${sub}</span>` : ''}</td>${rs.map(x => `<td>${x.r.ok ? f(x) : '<span class="text-earth-400">—</span>'}</td>`).join('')}</tr>`
+    const grp = (t: string) => `<tr class="grp"><td colspan="${rs.length + 1}">${t}</td></tr>`
+
+    const frases = rs.filter(x => x.e.id !== refId && x.r.ok && ref.r.ok).map(x => {
+      const dR = x.r.resultado - ref.r.resultado
+      const dD = x.r.dias - ref.r.dias
+      const dP = x.r.plataNecesaria - ref.r.plataNecesaria
+      const dM = x.r.rentabilidadMensual - ref.r.rentabilidadMensual
+      const partes = [
+        Math.abs(dR) < 1 ? 'deja lo mismo por animal' : `deja <strong class="${cls(dR)}">${bs(Math.abs(dR))} ${dR > 0 ? 'más' : 'menos'}</strong> por animal`,
+        Math.abs(dD) < 1 ? 'tarda lo mismo' : `tarda <strong>${nf(Math.abs(dD))} días ${dD > 0 ? 'más' : 'menos'}</strong>`,
+        Math.abs(dP) < 1 ? 'necesita la misma plata' : `necesita <strong>${bs(Math.abs(dP))} ${dP > 0 ? 'más' : 'menos'}</strong>`,
+      ]
+      const tiempo = Math.abs(dM) < 0.0005 ? '' : ` Su rentabilidad mensual es <strong class="${cls(dM)}">${nf(Math.abs(dM) * 100, 2)} puntos ${dM > 0 ? 'mayor' : 'menor'}</strong>.`
+      return `<li><strong>${esc(x.e.nombre)}</strong> ${partes.join(', ')}.${tiempo}</li>`
+    })
+
+    panel.innerHTML = `
+      <div class="card overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="cmp w-full text-sm">
+            <thead><tr class="bg-earth-200/70 text-xs text-earth-800">
+              <th class="!bg-earth-200 font-semibold">Por animal</th>
+              ${rs.map(x => `<th class="font-display font-semibold text-sm text-potrero-900">${esc(x.e.nombre)}</th>`).join('')}
+            </tr></thead>
+            <tbody>
+              ${fila('<strong>Precio total de compra</strong>', x => `<strong>${bs(x.r.precioTotalCompraKg, 2)}/kg</strong>`, 'todo incluido, por kg pagado')}
+              ${fila('Podés pagar hasta', x => x.l.precioMaxTotalCompraKg === null ? '—' : `<span class="${x.l.precioMaxTotalCompraKg >= x.r.precioTotalCompraKg ? 'pos' : 'neg'}">${bs(x.l.precioMaxTotalCompraKg, 2)}/kg</span>`, 'precio total con resultado = 0')}
+              ${fila('Plata necesaria', x => bs(x.r.plataNecesaria), 'compra + gastos + producción')}
+              ${fila('Resultado', x => `<strong class="${cls(x.r.resultado)}">${bsSigno(x.r.resultado)}</strong>`, 'sobre los costos cargados')}
+              ${fila('Entrada', x => fechaCorta(x.r.fechaCompra), '')}
+              ${fila('Salida', x => `<strong>${fechaCorta(x.r.fechaVenta)}</strong>`, '')}
+              ${fila('Días en el campo', x => `${nf(x.r.dias)} <span class="text-earth-500 text-xs">(${meses(x.r.meses)})</span>`)}
+              ${fila('Rendimiento del ciclo', x => `<span class="${cls(x.r.resultado)}">${pc(x.r.rendimientoCiclo)}</span>`, 'resultado ÷ plata necesaria, no anual')}
+              ${fila('Rentabilidad mensual', x => `<span class="${cls(x.r.rentabilidadMensual)}">${pc(x.r.rentabilidadMensual, 2)}</span>`, 'rendimiento del ciclo ÷ meses')}
+              ${grp('Indicadores por kg')}
+              ${fila('Ágio', x => `<span class="${x.r.agioPct > 0 ? 'neg' : 'pos'}">${pc(x.r.agioPct)}</span>`, 'precio de compra ÷ precio de venta − 1')}
+              ${fila('Ágio total', x => `<span class="${x.r.agioPctTotal > 0 ? 'neg' : 'pos'}">${pc(x.r.agioPctTotal)}</span>`, 'con flete, comisión y gastos')}
+              ${fila('Relación compra / venta', x => `${nf(x.r.relacionCompraVenta, 2)} kg`, 'kg comprados que paga 1 kg vendido')}
+              ${fila('Costo por kg producido', x => `${bs(x.r.costoKgProducido, 2)}`)}
+              ${fila('Margen bruto por kg producido', x => `<span class="${cls(x.r.margenPorKgProducido)}">${bsSigno(x.r.margenPorKgProducido, 2)}</span>`, 'venta neta − costo por kg producido')}
+              ${fila('Resultado por kg producido', x => `<span class="${cls(x.r.resultadoPorKgProducido)}">${bsSigno(x.r.resultadoPorKgProducido, 2)}</span>`, 'incluye ágio y desbaste')}
+              ${fila('Precio neto por kg gancho', x => x.e.tipoVenta === 'gancho' ? bs(x.r.precioNetoVentaGancho, 2) : '<span class="text-earth-400">venta al vivo</span>', 'solo si vendés al gancho')}
+              ${grp('Supuestos')}
+              ${fila('Compra', x => `${nf(x.e.pesoCompra)} kg · ${bs(x.e.precioCompra, 2)}/kg`)}
+              ${fila('Venta', x => `${nf(x.r.pesoVenta)} kg · ${bs(x.e.precioVenta, 2)}/kg`)}
+              ${fila('GDP', x => `${nf(x.e.gdp, 2)} kg/día`)}
+              ${fila('Forma de cargar el costo', x => x.e.modoCosto === 'detallado' ? 'detallado por mes' : 'por kg producido')}
+              ${grp('Margen para soportar cambios (resultado = 0)')}
+              ${fila('Precio de lista máximo', x => x.l.precioMaxCompra === null ? '—' : `${bs(x.l.precioMaxCompra, 2)}/kg`, 'sin flete ni comisión')}
+              ${fila('Precio mínimo de venta', x => x.l.precioMinVenta === null ? '—' : `${bs(x.l.precioMinVenta, 2)}/kg ${x.e.tipoVenta === 'gancho' ? 'gancho' : 'vivo'}`)}
+              ${fila('Costo máximo por kg producido', x => x.l.costoMaxKg === null ? '—' : `${bs(x.l.costoMaxKg, 2)}/kg`)}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card p-5">
+        <div class="flex flex-wrap items-center gap-3 mb-3">
+          <p class="card-title">En palabras, comparado con</p>
+          <select id="c-ref" class="bg-earth-50 border border-earth-200 rounded-lg px-3 py-1.5 text-sm">
+            ${rs.map(x => `<option value="${x.e.id}" ${x.e.id === refId ? 'selected' : ''}>${esc(x.e.nombre)}</option>`).join('')}
+          </select>
+        </div>
+        <ul class="space-y-2 text-sm text-potrero-800 list-none">${frases.join('') || '<li class="hint">Completá los escenarios para comparar.</li>'}</ul>
+        <p class="note mt-4">
+          Dejar más plata por animal no siempre conviene si tarda mucho más o necesita más plata.
+          Mirá juntos el resultado, los días y el resultado por mes. Ninguno de estos números incluye mortandad, impuestos ni el costo de tu plata.
+        </p>
+      </div>`
+    $('c-ref').addEventListener('change', ev => { refId = (ev.target as HTMLSelectElement).value; pintarComparar() })
+  }
+
+  // ── Pestaña 3: cuánto aguanta ──
+  let mSel = 'actual'
+  const ajustes = { precioCompra: 0, precioVenta: 0, costo: 0, gdp: 0 }
+
+  function escenarioMargenes(): Escenario {
+    return st.guardados.find(x => x.id === mSel) ?? st.actual
+  }
+
+  function pintarMargenes() {
+    const sel = $<HTMLSelectElement>('m-escenario')
+    if (mSel !== 'actual' && !st.guardados.some(x => x.id === mSel)) mSel = 'actual'
+    sel.innerHTML = `<option value="actual">El que estás cargando${st.actual.nombre ? ` (${esc(st.actual.nombre)})` : ''}</option>` +
+      st.guardados.map(x => `<option value="${x.id}" ${x.id === mSel ? 'selected' : ''}>${esc(x.nombre)}</option>`).join('')
+    sel.value = mSel
+
+    const e = escenarioMargenes()
+    const r = calcular(e)
+    const objetivo = parseFloat($<HTMLInputElement>('m-objetivo').value) || 0
+    const l = limites(e, objetivo)
+    const boxL = $('m-limites')
+    if (!r.ok) { boxL.innerHTML = `<div class="card p-5 hint">Este escenario está incompleto: ${r.errores.map(esc).join(' ')}</div>`; $('m-quepasa').innerHTML = ''; return }
+
+    const meta = objetivo === 0 ? 'para no perder plata' : `para dejar al menos ${bs(objetivo)} por animal`
+    const holgura = (hoy: number, lim: number, sube: boolean) => {
+      const d = (lim - hoy) / hoy
+      const ok = sube ? lim >= hoy : lim <= hoy
+      return ok
+        ? `<span class="pos">Hoy tenés margen: ${pc(Math.abs(d))} ${sube ? 'más arriba' : 'más abajo'}.</span>`
+        : `<span class="neg">Hoy ya estás pasado: ${pc(Math.abs(d))}.</span>`
+    }
+    const tarjeta = (t: string, valor: string, frase: string, extra: string) => `
+      <div class="card p-4">
+        <p class="text-xs text-earth-600">${t}</p>
+        <p class="font-display text-[1.75rem] font-semibold tracking-tight text-potrero-900 mt-0.5 tabular-nums">${valor}</p>
+        <p class="text-sm text-potrero-800 mt-1.5">${frase}</p>
+        <p class="text-xs mt-1.5">${extra}</p>
+      </div>`
+
+    boxL.innerHTML = `
+      <p class="text-sm text-potrero-800 mb-3">Cuánto puede moverse cada cosa, <strong>dejando todo lo demás igual</strong>, ${meta}:</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${tarjeta('¿Cuánto puedo pagar?', l.precioMaxTotalCompraKg! > 0 ? `${bs(l.precioMaxTotalCompraKg!, 2)}/kg total` : 'Nada',
+          l.precioMaxTotalCompraKg! > 0
+            ? `Precio total de compra máximo, todo incluido. Hoy: <strong>${bs(r.precioTotalCompraKg, 2)}/kg</strong>. ${l.precioMaxCompra! > 0 ? `Con tu flete y comisión, equivale a un precio de lista de ${bs(l.precioMaxCompra!, 2)}/kg (hoy ${bs(e.precioCompra, 2)}).` : ''}`
+            : 'Con esta venta y estos costos, ningún precio de compra alcanza.',
+          l.precioMaxTotalCompraKg! > 0 ? holgura(r.precioTotalCompraKg, l.precioMaxTotalCompraKg!, true) : '')}
+        ${tarjeta('¿A qué precio necesito vender?', `${bs(l.precioMinVenta!, 2)}/kg ${e.tipoVenta === 'gancho' ? 'gancho' : 'vivo'}`,
+          `Precio mínimo de venta, saliendo con ${nf(r.pesoVenta)} kg vivos. Hoy: ${bs(e.precioVenta, 2)}/kg ${e.tipoVenta === 'gancho' ? 'gancho' : 'vivo'}.`,
+          holgura(e.precioVenta, l.precioMinVenta!, false))}
+        ${tarjeta('¿Cuánto puede subir mi costo?', l.costoMaxKg! > 0 ? `${bs(l.costoMaxKg!, 2)}/kg producido` : 'Nada',
+          l.costoMaxKg! > 0 ? `Costo máximo por kg producido. Hoy: ${bs(r.costoKgProducido, 2)}/kg${e.modoCosto === 'detallado' ? ` (equivale a ${bs(l.costoMaxKg! * r.kgProducir / r.meses)} por animal por mes)` : ''}.` : 'Aunque producir fuera gratis, la diferencia entre compra y venta no alcanza.',
+          l.costoMaxKg! > 0 ? holgura(r.costoKgProducido, l.costoMaxKg!, true) : '')}
+        ${(() => {
+          const fechaMin = !l.cadaKgPierde && r.fechaCompra ? sumarDias(r.fechaCompra, Math.ceil(l.diasMinimos ?? 0)) : null
+          return tarjeta('¿Desde cuándo puedo vender?',
+            l.cadaKgPierde ? 'Nunca' : fechaMin ? fechaCorta(fechaMin) : `${nf(l.pesoMinVenta!)} kg vivos`,
+            l.cadaKgPierde
+              ? `Cada kg que producís cuesta ${bs(r.costoKgProducido, 2)} y, después del desbaste, te pagan ${nf(1 - e.desbasteVenta / 100, 2)} kg a ${bs(r.precioNetoVentaKg, 2)}: engordar más agranda la pérdida.`
+              : l.pesoMinVenta! <= r.pesoInicio
+                ? `Ya desde el peso de entrada alcanzás la meta. Cada kg extra deja ${bsSigno(r.margenPorKgProducido, 2)}.`
+                : `Salida más temprana con este precio y este costo: con <strong>${nf(l.pesoMinVenta!)} kg vivos</strong>, ${nf(l.diasMinimos ?? 0)} días después de la entrada. Hoy salís el ${fechaCorta(r.fechaVenta)} con ${nf(r.pesoVenta)} kg.`,
+            l.cadaKgPierde ? '' : holgura(r.pesoVenta, l.pesoMinVenta!, false))
+        })()}
+      </div>`
+    pintarQuePasa(e, r)
+  }
+
+  function aplicarAjustes(e: Escenario): Escenario {
+    const mod: Escenario = structuredClone(e)
+    mod.precioCompra = e.precioCompra * (1 + ajustes.precioCompra / 100)
+    mod.precioVenta = e.precioVenta * (1 + ajustes.precioVenta / 100)
+    mod.gdp = e.gdp * (1 + ajustes.gdp / 100)
+    if (mod.modoCosto === 'simple') mod.costoKg = e.costoKg * (1 + ajustes.costo / 100)
+    else for (const k of Object.keys(mod.detallado) as (keyof Escenario['detallado'])[]) mod.detallado[k] = e.detallado[k] * (1 + ajustes.costo / 100)
+    return mod
+  }
+
+  // Arma los controles una sola vez; al mover un control solo se actualizan los números.
+  function pintarQuePasa(e: Escenario, _r0: Resultado) {
+    const slider = (k: keyof typeof ajustes, t: string) => `
+      <div>
+        <div class="flex justify-between text-xs mb-1"><span class="font-semibold text-potrero-800">${t}</span>
+          <span class="text-earth-700" id="aj-val-${k}"></span></div>
+        <input type="range" min="-30" max="30" step="1" value="${ajustes[k]}" data-aj="${k}" aria-label="${t}" />
+      </div>`
+    $('m-quepasa').innerHTML = `
+      <div class="card p-5 space-y-4">
+        <div class="flex items-center justify-between gap-3">
+          <p class="card-title">¿Qué pasa si…?</p>
+          <button type="button" class="btn-mini" id="aj-reset">Volver a cero</button>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-x-6 gap-y-4">
+          ${slider('precioCompra', 'Precio de compra')}
+          ${slider('precioVenta', 'Precio de venta')}
+          ${slider('costo', e.modoCosto === 'simple' ? 'Costo por kg producido' : 'Gastos por mes')}
+          ${slider('gdp', 'Ganancia diaria (GDP)')}
+        </div>
+        <div id="qp-out" class="space-y-4"></div>
+        <p class="hint">Esto no cambia tu escenario guardado. Si te gusta lo que ves, cargalo en <strong>Mi negocio</strong> y guardalo como escenario nuevo.</p>
+      </div>`
+    actualizarQuePasa(e)
+  }
+
+  function actualizarQuePasa(e: Escenario) {
+    const r0 = calcular(e)
+    const mod = aplicarAjustes(e)
+    const r = calcular(mod)
+    const etiqueta = (k: keyof typeof ajustes, valor: string) => {
+      const el = document.getElementById(`aj-val-${k}`)
+      if (el) el.innerHTML = `${ajustes[k] > 0 ? '+' : ''}${ajustes[k]} % → <strong>${valor}</strong>`
+    }
+    etiqueta('precioCompra', `${bs(mod.precioCompra, 2)}/kg`)
+    etiqueta('precioVenta', `${bs(mod.precioVenta, 2)}/kg`)
+    etiqueta('costo', e.modoCosto === 'simple' ? `${bs(mod.costoKg, 2)}/kg` : `${bs(r.costoMensual)}/mes`)
+    etiqueta('gdp', `${nf(mod.gdp, 2)} kg/día`)
+
+    const comp = (t: string, a: string, b: string, dif: number, fmt: (n: number) => string, buenoSube = true) => `
+      <div class="bg-earth-200/50 rounded-xl p-3">
+        <p class="text-xs text-earth-600">${t}</p>
+        <p class="font-display font-semibold text-potrero-900 text-xl tabular-nums">${b}</p>
+        <p class="text-xs text-earth-600">antes ${a}${Math.abs(dif) > 1e-9 ? ` · <span class="${(dif > 0) === buenoSube ? 'pos' : 'neg'}">${dif > 0 ? '+' : '−'}${fmt(Math.abs(dif))}</span>` : ''}</p>
+      </div>`
+
+    $('qp-out').innerHTML = `
+        ${e.modoCosto === 'simple' && ajustes.gdp !== 0 ? `<p class="note">Con costo por kg fijo, cambiar la GDP solo cambia los días, no el costo total. Si más GDP te cuesta más, subí también el costo por kg.</p>` : ''}
+        ${r.ok ? `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          ${comp('Resultado por animal', bsSigno(r0.resultado), `<span class="${cls(r.resultado)}">${bsSigno(r.resultado)}</span>`, r.resultado - r0.resultado, n => bs(n))}
+          ${comp('Días hasta la venta', nf(r0.dias), nf(r.dias), r.dias - r0.dias, n => nf(n), false)}
+          ${comp('Plata necesaria', bs(r0.plataNecesaria), bs(r.plataNecesaria), r.plataNecesaria - r0.plataNecesaria, n => bs(n), false)}
+          ${comp('Rentabilidad mensual', pc(r0.rentabilidadMensual, 2), `<span class="${cls(r.rentabilidadMensual)}">${pc(r.rentabilidadMensual, 2)}</span>`, r.rentabilidadMensual - r0.rentabilidadMensual, n => nf(n * 100, 2) + ' pts')}
+        </div>` : `<p class="hint">${r.errores.map(esc).join(' ')}</p>`}`
+  }
+
+  $('m-quepasa').addEventListener('input', ev => {
+    const t = ev.target as HTMLInputElement
+    if (!t.dataset.aj) return
+    ajustes[t.dataset.aj as keyof typeof ajustes] = parseInt(t.value, 10)
+    actualizarQuePasa(escenarioMargenes())
+  })
+  $('m-quepasa').addEventListener('click', ev => {
+    if ((ev.target as HTMLElement).id !== 'aj-reset') return
+    ajustes.precioCompra = ajustes.precioVenta = ajustes.costo = ajustes.gdp = 0
+    pintarMargenes()
+  })
+  $('m-escenario').addEventListener('change', ev => { mSel = (ev.target as HTMLSelectElement).value; pintarMargenes() })
+  $('m-objetivo').addEventListener('input', pintarMargenes)
+
+  // ── Pestañas ──
+  let tab = 'negocio'
+  document.querySelectorAll<HTMLButtonElement>('.tab').forEach(b => b.addEventListener('click', () => {
+    tab = b.dataset.tab!
+    document.querySelectorAll<HTMLButtonElement>('.tab').forEach(x => x.setAttribute('aria-selected', String(x === b)))
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('hidden', p.id !== `panel-${tab}`))
+    pintarTodo()
+    window.scrollTo({ top: 0 })
+  }))
+
+  function pintarTodo() {
+    pintarNegocio()
+    if (tab === 'comparar') pintarComparar()
+    if (tab === 'margenes') pintarMargenes()
+  }
+
+  escribirForm(st.actual)
+  pintarTodo()
 </script>
